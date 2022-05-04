@@ -1,6 +1,7 @@
 import { Api } from '../axios-config';
 
 const getAll = async (
+	page,
 	filterTipo,
 	filterStatus,
 	filterModerador,
@@ -15,7 +16,7 @@ const getAll = async (
 				filterModerador && '&moderador=' + filterModerador + '&	'
 			}${order && 'ordenar=' + order + '&'}${
 				busca && 'busca=' + busca + '&'
-			}`
+			}${page && 'page=' + page + '&'}`
 		);
 		console.log(
 			`/usuario/listarUsuarioComum?${

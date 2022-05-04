@@ -16,6 +16,7 @@ import {
 	Paper,
 	Grid,
 	TextField,
+	Pagination,
 } from '@mui/material';
 import { ReputationBar } from './componnents/ReputationBar';
 import { ColumnTitle } from './componnents/Texts/ColumnTitle';
@@ -60,8 +61,13 @@ const dashboard = () => {
 	const [moderador, setModerador] = useState('');
 	const [checked, setChecked] = useState('');
 
+	const [totalCount, setTotalCount] = useState(0);
+	const [page, setPage] = useState(1);
+	const limit = 9;
+
 	const listUsers = () => {
 		UserService.getAll(
+			page,
 			filterTipo,
 			filterStatus,
 			filterModerador,
@@ -72,13 +78,14 @@ const dashboard = () => {
 				alert(result.message);
 				return;
 			} else {
+				setTotalCount(result.size)
 				setUsers(result.usuarios);
 			}
 		});
 	};
 	useEffect(() => {
 		listUsers();
-	}, [filterTipo, filterModerador, filterStatus, order, busca]);
+	}, [filterTipo, filterModerador, filterStatus, order, busca, page]);
 
 	const handleClickCreate = () => {
 		UserService.create({
@@ -169,7 +176,7 @@ const dashboard = () => {
 
 	return (
 		<MenuDrawer>
-			<BaseLayout onClick={handleOpen} title="Usuário">
+			<BaseLayout onClick={handleOpen} title="Usuário" pagination page={page} setPage={setPage} limit={limit} totalCount={totalCount}>
 				<UserToolbar
 					setBuscador={setBusca}
 					setOrder={setOrder}
@@ -332,6 +339,8 @@ const dashboard = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+				
+
 				<Modal
 					open={openDeleteConfirm}
 					display="flex"
@@ -538,6 +547,7 @@ const dashboard = () => {
 					</Box>
 				</Modal>
 			</BaseLayout>
+			
 		</MenuDrawer>
 	);
 };

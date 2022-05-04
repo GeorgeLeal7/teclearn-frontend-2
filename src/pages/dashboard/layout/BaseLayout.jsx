@@ -5,12 +5,15 @@ import {
 	Button,
 	useMediaQuery,
 	Typography,
+	Pagination,
 } from '@mui/material';
 import { theme } from '../../../shared/themes';
 
-const BaseLayout = ({ title, subtitle, onClick, children, sx }) => {
+const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, setPage, limit, totalCount}) => {
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
+
+	
 
 	return (
 		<Box
@@ -91,6 +94,12 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx }) => {
 					overflow="hidden">
 					{children}
 				</Box>
+				{pagination && (<Pagination
+					sx={{marginTop: 3}}
+				page={page}
+				count={Math.ceil(totalCount / limit)}
+				onChange={(e, newPage) => setPage(newPage)}
+			/>)}
 			</Container>
 		</Box>
 	);
