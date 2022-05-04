@@ -1,0 +1,23 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+.MuiListItemButton-root.Mui-selected {
+	/* background-color: #22507e; */
+}
+
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper {
+	border: 0;
+}
+.css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
+	background-color: #c4c4c46d;
+	-webkit-backdrop-filter: saturate(180%) blur(2px);
+	backdrop-filter: saturate(180%) blur(2px);
+}
+
+.css-10cjb2k-MuiTableCell-root,
+.css-pgo35k-MuiTableCell-root {
+	background-color: #ffffff;
+	border: 0;
+}
