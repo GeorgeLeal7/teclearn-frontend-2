@@ -14,6 +14,7 @@ import { Box, useTheme } from '@mui/material';
 import { useState } from 'react';
 import { ModalTitle } from '../Texts/ModalTitle';
 import { Close } from '@mui/icons-material';
+import { MateriaService } from '../../services/api/materia/MateriaService';
 
 const CardAdd = () => {
 	const theme = useTheme();
@@ -22,11 +23,26 @@ const CardAdd = () => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	const [materias, setMaterias] = useState('');
+	const [idMaterias, setIdMaterias] = useState({});
+
 	const [chips, setChips] = useState({});
 
-	const handleClickChip = e => {
-		// setChips({ ...chips, id: e.target.id });
-		console.log(e);
+	const findAllMaterias = () => {
+		MateriaService.getAll().then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setMaterias(result);
+				console.log(result)
+			}
+		});
+	};
+
+	const handleClickChip = (id) => {
+		console.log(id)
+		
 	};
 
 	return (
@@ -42,6 +58,7 @@ const CardAdd = () => {
 				justifyContent="center"
 				alignItems="center">
 				<Add
+					onClick={findAllMaterias}
 					sx={{
 						width: '40%',
 						height: '40%',
@@ -127,7 +144,16 @@ const CardAdd = () => {
 								gap={1}
 								flexWrap="wrap"
 								overflow="scroll">
-								<Chip
+								{materias && materias.map((row) => (
+									<Chip
+									key="1"
+									id="2"
+									sx={{ flexGrow: 1 }}
+									label={row.materiaNome}
+									onClick={()=>handleClickChip(row.idMateria)}
+								/>
+								))}
+								{/* <Chip
 									key="1"
 									id="2"
 									sx={{ flexGrow: 1 }}
@@ -215,7 +241,7 @@ const CardAdd = () => {
 									sx={{ flexGrow: 1 }}
 									label="Linguagem de Marcacão"
 								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
+								<Chip sx={{ flexGrow: 1 }} label="Projetos" /> */}
 							</Box>
 						</Grid>
 
@@ -231,7 +257,9 @@ const CardAdd = () => {
 							paddingRight={3}>
 							<Button
 								sx={{ textTransform: 'capitalize' }}
-								variant="contained">
+								variant="contained"
+								
+							>
 								Cadastrar
 							</Button>
 						</Grid>
