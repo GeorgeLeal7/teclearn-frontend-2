@@ -1,10 +1,11 @@
 import { Api } from '../axios-config';
 
-const getAll = async () => {
+const getAll = async (busca) => {
 	try {
-		const { data } = await Api.get(`/materia/listarMateria/`);
+		const { data } = await Api.get(`/materia/listarMateria${busca && '?busca=' + busca}`);
 		if (data) return data;
-
+		console.log(`/materia/listarMateria/${busca && 'busca=' + busca}`);
+		console.log(data);
 		return new Error('Erro ao listar os registros');
 	} catch (error) {
 		console.log(error);

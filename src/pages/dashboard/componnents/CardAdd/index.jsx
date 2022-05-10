@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Box, useTheme } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModalTitle } from '../Texts/ModalTitle';
 import { Close } from '@mui/icons-material';
 import { MateriaService } from '../../services/api/materia/MateriaService';
@@ -24,25 +24,42 @@ const CardAdd = () => {
 	const handleClose = () => setOpen(false);
 
 	const [materias, setMaterias] = useState('');
-	const [idMaterias, setIdMaterias] = useState({});
+	const [idMaterias, setIdMaterias] = useState([]);
+
+	const [materiaNome, setMateriaNome] = useState('');
+	const [busca, setBusca] = useState('');
 
 	const [chips, setChips] = useState({});
 
+	
+	useEffect(() => {
+		findAllMaterias();
+	}, [busca]);
+
 	const findAllMaterias = () => {
-		MateriaService.getAll().then(result => {
+		MateriaService.getAll(busca).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
 			} else {
 				setMaterias(result);
-				console.log(result)
+			
 			}
 		});
 	};
 
-	const handleClickChip = (id) => {
-		console.log(id)
+	const createCurso = () => {
 		
+	}
+	const handleClickChip = (id) => {
+		var add = true
+		idMaterias.length != 0  && idMaterias.map((idMateria, key) => {
+			if (idMateria == id) {
+				idMaterias.splice(key, 1);
+				add = false;
+			}
+		})
+		if (add) setIdMaterias([...idMaterias, id]);
 	};
 
 	return (
@@ -107,6 +124,8 @@ const CardAdd = () => {
 							flexDirection="column"
 							gap={3}>
 							<TextField
+								value={materiaNome}
+								onChange={(e)=>setMateriaNome(e.target.value)}
 								fullWidth
 								variant="standard"
 								label="Nome"
@@ -127,6 +146,8 @@ const CardAdd = () => {
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
+										value={busca}
+										onChange={(e)=> setBusca(e.target.value)}
 										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
 										placeholder="Pesquisar..."
 										inputProps={{
@@ -144,10 +165,10 @@ const CardAdd = () => {
 								gap={1}
 								flexWrap="wrap"
 								overflow="scroll">
-								{materias && materias.map((row) => (
+								{materias && materias.map((row,i) => (
 									<Chip
-									key="1"
-									id="2"
+									key={i}
+								
 									sx={{ flexGrow: 1 }}
 									label={row.materiaNome}
 									onClick={()=>handleClickChip(row.idMateria)}
