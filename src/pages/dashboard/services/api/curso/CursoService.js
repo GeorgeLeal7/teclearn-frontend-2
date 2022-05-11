@@ -1,11 +1,12 @@
 import { Api } from '../axios-config';
 
-const getAll = async (busca) => {
+const getAll = async () => {
 	try {
-		const { data } = await Api.get(`/materia/listarMateria${busca && '?busca=' + busca}`);
+		const { data } = await Api.get(
+			`/curso/listarCurso`
+		);
 		if (data) return data;
-		console.log(`/materia/listarMateria/${busca && 'busca=' + busca}`);
-		console.log(data);
+
 		return new Error('Erro ao listar os registros');
 	} catch (error) {
 		console.log(error);
@@ -35,17 +36,17 @@ const getAll = async (busca) => {
 // 	}
 // };
 
-// const create = async datas => {
-// 	try {
-// 		const { data } = await Api.post(`/usuario/inserirUsuarioComum`, datas);
-// 		if (data) return data.id;
+const create = async datas => {
+	try {
+		const { data } = await Api.post(`/curso/inserirCurso`, datas);
+		if (data) return data.id;
 
-// 		return new Error('Erro ao criar o registro');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao criar o registro');
-// 	}
-// };
+		return new Error('Erro ao criar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao criar o registro');
+	}
+};
 
 // const update = async (datas, id) => {
 // 	try {
@@ -62,12 +63,12 @@ const getAll = async (busca) => {
 // 	}
 // };
 
-const MateriaService = {
+const CursoService = {
 	getAll,
 	// getById,
 	// deleteById,
-	// create,
+	create,
 	// update,
 };
 
-export { MateriaService };
+export {CursoService};

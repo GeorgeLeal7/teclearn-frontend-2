@@ -1,7 +1,7 @@
 import { Edit } from '@mui/icons-material';
 import { Box, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
 
-const CardCurso = () => {
+const CardCurso = (id, cursoNome, imagem) => {
 	const theme = useTheme();
 
 	const lgDown = useMediaQuery(theme.breakpoints.down(1400));
@@ -32,7 +32,7 @@ const CardCurso = () => {
 						fontWeight="500"
 						fontFamily="poppins"
 						color="primary.fontMain">
-						Análise e desenvolvimento de sistemas
+						{cursoNome}
 					</Typography>
 				</Box>
 			</Box>

@@ -1,10 +1,11 @@
-import { useTheme, Grid, useMediaQuery } from '@mui/material';
-import { useEffect } from 'react';
+import { useTheme, Grid, useMediaQuery, Chip } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { MenuDrawer } from '../componnents/menuDrawer/MenuDrawer';
 import { useDrawerContext } from '../../../shared/contexts';
 import BaseCleanLayout from '../layout/BaseCleanLayout';
 import { CardCurso } from '../componnents/CardCurso';
 import { CardAdd } from '../componnents/CardAdd';
+import { CursoService } from '../services/api/curso/CursoService';
 
 const dashboard = () => {
 	const theme = useTheme();
@@ -12,6 +13,28 @@ const dashboard = () => {
 
 	const lgDown = useMediaQuery(theme.breakpoints.down(1400));
 	const exUp = useMediaQuery(theme.breakpoints.up(1900));
+
+	const [cursos, setCursos] = useState('');
+
+	const findAllCursos = () => {
+		CursoService.getAll().then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				console.log(result);
+				setCursos(result);
+			}
+		});
+	};
+
+	useEffect(() => {
+		findAllCursos();
+		console.log(cursos);
+	}, []);
+	useEffect(() => {
+		console.log(cursos)
+	}, [cursos]);
 
 	useEffect(() => {
 		console.log(handleSetDrawerOptions);
@@ -57,136 +80,37 @@ const dashboard = () => {
 		<MenuDrawer>
 			<BaseCleanLayout>
 				<Grid container width="100%" height="100%">
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
-					<Grid
-						item
-						xs={3}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}
-						padding={1}>
-						<CardCurso />
-					</Grid>
+					
+					{cursos && cursos.map((row, i) => (
+						
+						<Grid
+							key={i}
+							item
+							xs={3}
+							height={
+								lgDown
+									? theme.spacing(30)
+									: exUp
+									? theme.spacing(43)
+									: theme.spacing(35)
+							}
+							padding={1}>
+							<CardCurso id={row.idCurso} nome={row.cursoNome} imagem={row.cursoImagem} setCursos={findAllCursos}/>
+							
+						</Grid>
+					))}
+
+							{/* {cursos && cursos.map((row,i) => (
+																<Chip
+									key={i}
+								
+									sx={{ flexGrow: 1 }}
+									label="dasd"
+								
+								/>
+								))} */}
+					
+					
 					<Grid
 						item
 						xs={3}

@@ -15,26 +15,30 @@ import { useEffect, useState } from 'react';
 import { ModalTitle } from '../Texts/ModalTitle';
 import { Close } from '@mui/icons-material';
 import { MateriaService } from '../../services/api/materia/MateriaService';
+import { CursoService } from '../../services/api/curso/CursoService';
 
-const CardAdd = () => {
+const CardAdd = (setCursos) => {
 	const theme = useTheme();
 
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	
 	const [materias, setMaterias] = useState('');
 	const [idMaterias, setIdMaterias] = useState([]);
 
-	const [materiaNome, setMateriaNome] = useState('');
+	const [cursoNome, setCursoNome] = useState('');
 	const [busca, setBusca] = useState('');
-
-	const [chips, setChips] = useState({});
 
 	
 	useEffect(() => {
 		findAllMaterias();
 	}, [busca]);
+
+
+
+	
 
 	const findAllMaterias = () => {
 		MateriaService.getAll(busca).then(result => {
@@ -42,13 +46,22 @@ const CardAdd = () => {
 				alert(result.message);
 				return;
 			} else {
+				console.log(result);
 				setMaterias(result);
-			
 			}
 		});
 	};
 
 	const createCurso = () => {
+		CursoService.create({
+			cursoNome,
+			cursoImagem: "imagem",
+			materias: idMaterias
+		}).then((result) => {
+			setIdMaterias([]);
+			setCursoNome('');
+			setCursos();
+		});
 		
 	}
 	const handleClickChip = (id) => {
@@ -124,8 +137,8 @@ const CardAdd = () => {
 							flexDirection="column"
 							gap={3}>
 							<TextField
-								value={materiaNome}
-								onChange={(e)=>setMateriaNome(e.target.value)}
+								value={cursoNome}
+								onChange={(e)=>setCursoNome(e.target.value)}
 								fullWidth
 								variant="standard"
 								label="Nome"
@@ -174,95 +187,6 @@ const CardAdd = () => {
 									onClick={()=>handleClickChip(row.idMateria)}
 								/>
 								))}
-								{/* <Chip
-									key="1"
-									id="2"
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-									onClick={handleClickChip}
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" />
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Hardware e Redes"
-								/>
-								<Chip
-									sx={{ flexGrow: 1 }}
-									label="Linguagem de Marcacão"
-								/>
-								<Chip sx={{ flexGrow: 1 }} label="Projetos" /> */}
 							</Box>
 						</Grid>
 
@@ -279,7 +203,7 @@ const CardAdd = () => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								
+								onClick={createCurso}
 							>
 								Cadastrar
 							</Button>
