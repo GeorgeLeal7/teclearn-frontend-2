@@ -17,7 +17,7 @@ import { Close } from '@mui/icons-material';
 import { MateriaService } from '../../services/api/materia/MateriaService';
 import { CursoService } from '../../services/api/curso/CursoService';
 
-const CardAdd = (setCursos) => {
+const CardAdd = ({findCursos}) => {
 	const theme = useTheme();
 
 	const [open, setOpen] = useState(false);
@@ -60,19 +60,22 @@ const CardAdd = (setCursos) => {
 		}).then((result) => {
 			setIdMaterias([]);
 			setCursoNome('');
-			setCursos();
+			findCursos();
 		});
 		
 	}
 	const handleClickChip = (id) => {
 		var add = true
+		console.log(id.id);
 		idMaterias.length != 0  && idMaterias.map((idMateria, key) => {
-			if (idMateria == id) {
+			if (idMateria == id.id) {
 				idMaterias.splice(key, 1);
 				add = false;
 			}
 		})
 		if (add) setIdMaterias([...idMaterias, id]);
+		console.log(idMaterias)
+	
 	};
 
 	return (
@@ -135,7 +138,7 @@ const CardAdd = (setCursos) => {
 							padding={3}
 							display="flex"
 							flexDirection="column"
-							gap={3}>
+							gap={2}>
 							<TextField
 								value={cursoNome}
 								onChange={(e)=>setCursoNome(e.target.value)}
@@ -172,7 +175,7 @@ const CardAdd = (setCursos) => {
 							</Box>
 
 							<Box
-								maxHeight="100%"
+								maxHeight="50%"
 								width="100%"
 								display="flex"
 								gap={1}
@@ -180,9 +183,42 @@ const CardAdd = (setCursos) => {
 								overflow="scroll">
 								{materias && materias.map((row,i) => (
 									<Chip
-									key={i}
-								
-									sx={{ flexGrow: 1 }}
+										key={i}
+										
+										// sx={idMaterias.map((id) => { 
+										// 	if (row.idMateria == id) {
+										// 		return {backgroundColor: "#ff88ff"}
+										// 	}
+											
+											
+										// })
+										// }
+									
+									label={row.materiaNome}
+										onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
+								/>
+								))}
+							</Box>
+							<Box
+								maxHeight="50%"
+								width="100%"
+								display="flex"
+								gap={1}
+								flexWrap="wrap"
+								overflow="scroll">
+								{idMaterias && idMaterias.map((row,i) => (
+									<Chip
+										key={i}
+										color="primary"
+										// sx={idMaterias.map((id) => { 
+										// 	if (row.idMateria == id) {
+										// 		return {backgroundColor: "#ff88ff"}
+										// 	}
+											
+											
+										// })
+										// }
+									
 									label={row.materiaNome}
 									onClick={()=>handleClickChip(row.idMateria)}
 								/>

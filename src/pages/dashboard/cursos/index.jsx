@@ -22,8 +22,9 @@ const dashboard = () => {
 				alert(result.message);
 				return;
 			} else {
-				console.log(result);
+				
 				setCursos(result);
+				// cursos(result);
 			}
 		});
 	};
@@ -75,42 +76,55 @@ const dashboard = () => {
 				label: 'Administradores',
 			},
 		]);
+
+
+		
 	}, []);
 	return (
 		<MenuDrawer>
 			<BaseCleanLayout>
 				<Grid container width="100%" height="100%">
-					
-					{cursos && cursos.map((row, i) => (
-						
-						<Grid
-							key={i}
-							item
-							xs={3}
-							height={
-								lgDown
-									? theme.spacing(30)
-									: exUp
-									? theme.spacing(43)
-									: theme.spacing(35)
-							}
-							padding={1}>
-							<CardCurso id={row.idCurso} nome={row.cursoNome} imagem={row.cursoImagem} setCursos={findAllCursos}/>
-							
-						</Grid>
-					))}
+					{
+						cursos.length > 0 && cursos.map(curso => (	
+							<Grid
+								key={curso.idCurso}
+								item
+								xs={3}
+								height={
+									lgDown
+										? theme.spacing(30)
+										: exUp
+										? theme.spacing(43)
+										: theme.spacing(35)
+									}
+								padding={1}>
+									<CardCurso id={curso.idCurso} nome={curso.cursoNome} imagem={curso.cursoImagem} />
+								</Grid>
+							)
+						)
+					}
 
-							{/* {cursos && cursos.map((row,i) => (
-																<Chip
-									key={i}
 								
-									sx={{ flexGrow: 1 }}
-									label="dasd"
-								
-								/>
-								))} */}
+
+
+					{/* // 	<Grid
+					// 		key={row.idCurso}
+					// 		item
+					// 		xs={3}
+					// 		height={
+					// 			lgDown
+					// 				? theme.spacing(30)
+					// 				: exUp
+					// 				? theme.spacing(43)
+					// 				: theme.spacing(35)
+					// 		}
+					// 		padding={1}>
+					// 		<CardCurso id={row.idCurso} nome={row.cursoNome} imagem={row.cursoImagem} setCursos={findAllCursos}/>
+							
+					// 	</Grid>
+					// )
 					
-					
+					// ) */}
 					<Grid
 						item
 						xs={3}
@@ -122,7 +136,7 @@ const dashboard = () => {
 								? theme.spacing(43)
 								: theme.spacing(35)
 						}>
-						<CardAdd />
+						<CardAdd findCursos={findAllCursos}/>
 					</Grid>
 				</Grid>
 			</BaseCleanLayout>
