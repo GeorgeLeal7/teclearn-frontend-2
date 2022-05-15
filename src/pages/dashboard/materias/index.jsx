@@ -72,7 +72,7 @@ const dashboard = () => {
 	}, []);
 	return (
 		<MenuDrawer>
-			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Curso">
+			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Materia">
 				<Box width="50%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
 					<Grid container width="100%">
 						<Grid

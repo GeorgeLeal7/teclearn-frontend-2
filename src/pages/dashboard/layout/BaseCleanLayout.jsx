@@ -43,7 +43,7 @@ const BaseCleanLayout = ({ title, subtitle, onClick, children }) => {
 							color="primary.contrastText"
 							fontFamily="poppins"
 							backgroundColor="primary.abc">
-							Controle de Usuários
+							Controle de cursos
 						</Typography>
 						<Typography
 							width={theme.spacing(36)}
@@ -51,7 +51,7 @@ const BaseCleanLayout = ({ title, subtitle, onClick, children }) => {
 							fontFamily="poppins"
 							fontSize={22}
 							fontWeight="300">
-							Gerencie os usuários da plataforma.
+							Gerencie os cursos da plataforma.
 						</Typography>
 					</Box>
 					<Box

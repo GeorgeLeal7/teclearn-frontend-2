@@ -28,6 +28,7 @@ import { Text } from './componnents/Texts/Text';
 import { ModalTitle } from './componnents/Texts/ModalTitle';
 import { ToolbarSelect } from './componnents/ToolbarSelect';
 import BasicToolbar from './componnents/BasicToolbar/BasicToolbar';
+import { AdminService } from './services/api/administrador/AdminService';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -35,12 +36,51 @@ const dashboard = () => {
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
+	const [admins, setAdmins] = useState();
+	const [nome, setNome] = useState();
+	const [email, setEmail] = useState();
+
+	const [idAdmin, setIdAdmin] = useState();
+
 	const [open, setOpen] = useState(false);
+	const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	const createAdmin = ()=>{
+		AdminService.create({
+			nome: nome,
+			email: email,
+			senha: "123",
+			status: 1,
+			classificacao: "administrador"
+		}).then(() => {
+			setOpen(false);
+			listAdmins();
+		});
+	};
+	const listAdmins=() =>{
+		AdminService.getAll().then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setAdmins(result);
+				console.log(result);
+			}
+		});
+	}
+
+	const handleClickDelete = ()=>{
+		 AdminService.deleteById(idAdmin);
+		listAdmins();
+		setOpenDeleteConfirm(false);
+	}
+	useEffect(()=>{
+		listAdmins();
+	}, []);
+
 	useEffect(() => {
-		console.log(handleSetDrawerOptions);
 		handleSetDrawerOptions([
 			{
 				icon: 'home',
@@ -61,16 +101,6 @@ const dashboard = () => {
 				icon: 'auto_stories',
 				path: '/dashboard/materias',
 				label: 'Matérias',
-			},
-			{
-				icon: 'category',
-				path: '/dashboard/categorias',
-				label: 'Categorias',
-			},
-			{
-				icon: 'report_problem',
-				path: '/dashboard/denuncias',
-				label: 'Denúncias',
 			},
 			{
 				icon: 'gpp_good',
@@ -100,42 +130,114 @@ const dashboard = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							<TableRow
-								height={theme.spacing(9)}
-								sx={{ backgroundColor: '#F1FBFF' }}>
-								<TableCell width={theme.spacing(65)}>
-									<Text>
-										Paulo Henrique de Andrade Junior
-									</Text>
-								</TableCell>
+							{
+								admins && admins.map((row, i)=>(
+									<TableRow
+										height={theme.spacing(9)}
+										sx={{
+											backgroundColor:
+												i % 2 === 0 ? '#F1FBFF' : '#fff',
+										}}
+										>
+										<TableCell width={theme.spacing(65)}>
+											<Text>
+												{row.nome}
+											</Text>
+										</TableCell>
 
-								<TableCell width={theme.spacing(70)}>
-									Paulo.Henrique_andrade1762@outlook.com
-								</TableCell>
-								<TableCell
-									width={theme.spacing(15)}
-									sx={{ overFlow: 'hidden' }}
-									display="flex"
-									flexDirection="row">
-									<Box
-										width={theme.spacing(30)}
-										display="flex"
-										justifyContent="flex-end">
-										<IconButton
-											onClick={handleOpen}
-											children={<Edit />}
-											sx={{ color: '#8BDF94' }}
-										/>
-										<IconButton
-											children={<Delete />}
-											sx={{ color: '#FF6969' }}
-										/>
-									</Box>
-								</TableCell>
-							</TableRow>
+										<TableCell width={theme.spacing(70)}>
+											{row.email}
+										</TableCell>
+										<TableCell
+											width={theme.spacing(15)}
+											sx={{ overFlow: 'hidden' }}
+											display="flex"
+											flexDirection="row">
+											<Box
+												width={theme.spacing(30)}
+												display="flex"
+												justifyContent="flex-end">
+												<IconButton
+													onClick={handleOpen}
+													children={<Edit />}
+													sx={{ color: '#8BDF94' }}
+												/>
+												<IconButton
+													children={<Delete />}
+													sx={{ color: '#FF6969' }}
+													onClick={()=>{ setOpenDeleteConfirm(true); setIdAdmin(row.idUsuario)}}
+												/>
+											</Box>
+										</TableCell>
+									</TableRow>
+								))
+							}
 						</TableBody>
 					</Table>
 				</TableContainer>
+				<Modal
+					open={openDeleteConfirm}
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
+					backgroundColor="primary.modal"
+					component={Box}>
+					<Box
+						width={theme.spacing(60)}
+						height={theme.spacing(25)}
+						backgroundColor="primary.contrastText"
+						marginTop={-5}
+						borderRadius={1}
+						elevation={2}
+						padding={2}
+						component={Paper}>
+						<Grid container width="100%" height="100%">
+							<Grid
+								item
+								xs={12}
+								height="22%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="space-between"
+								padding={0.5}>
+								<ModalTitle>Excluir Administrador</ModalTitle>
+								<IconButton
+									onClick={() => setOpeDeleteConfirm(false)}
+									children={<Close />}
+									sx={{ color: '#FF6969' }}
+								/>
+							</Grid>
+							<Grid
+								item
+								xs={12}
+								height="50%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="space-between"
+								padding={0.5}>
+								<Text>
+									O administrador será apagado permanentemente da
+									plataforma. Tem certeza de que deseja
+									exclui-lo?
+								</Text>
+							</Grid>
+							<Grid
+								item
+								xs={12}
+								height="25%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="flex-end"
+								padding={1}>
+								<Button
+									variant="contained"
+									onClick={handleClickDelete}>
+									Excluir
+								</Button>
+							</Grid>
+						</Grid>
+					</Box>
+				</Modal>
 				<Modal
 					open={open}
 					display="flex"
@@ -183,19 +285,18 @@ const dashboard = () => {
 									variant="standard"
 									label="Nome"
 									size="large"
+									value={nome}
+									onChange={(e)=>setNome(e.target.value)}
 								/>
 								<TextField
 									fullWidth
 									variant="standard"
 									label="E-mail"
 									size="large"
+									value={email}
+									onChange={(e)=>setEmail(e.target.value)}
 								/>
-								<TextField
-									fullWidth
-									variant="standard"
-									label="Senha"
-									size="large"
-								/>
+								
 							</Grid>
 
 							<Grid
@@ -207,7 +308,7 @@ const dashboard = () => {
 								justifyContent="flex-start"
 								alignItems="flex-end"
 								padding={3}>
-								<Button variant="contained">Cadastrar</Button>
+								<Button variant="contained" onClick={()=> createAdmin()}>Cadastrar</Button>
 							</Grid>
 						</Grid>
 					</Box>

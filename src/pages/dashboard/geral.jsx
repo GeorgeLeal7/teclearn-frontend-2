@@ -40,11 +40,10 @@ const dashboard = () => {
 	const handleClose = () => setOpen(false);
 
 	useEffect(() => {
-		console.log(handleSetDrawerOptions);
 		handleSetDrawerOptions([
 			{
 				icon: 'home',
-				path: '/dashboard',
+				path: '/dashboard/geral',
 				label: 'Pagina Inicial',
 			},
 			{
@@ -61,16 +60,6 @@ const dashboard = () => {
 				icon: 'auto_stories',
 				path: '/dashboard/materias',
 				label: 'Matérias',
-			},
-			{
-				icon: 'category',
-				path: '/dashboard/categorias',
-				label: 'Categorias',
-			},
-			{
-				icon: 'report_problem',
-				path: '/dashboard/denuncias',
-				label: 'Denúncias',
 			},
 			{
 				icon: 'gpp_good',

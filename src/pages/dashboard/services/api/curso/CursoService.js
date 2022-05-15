@@ -14,18 +14,18 @@ const getAll = async () => {
 	}
 };
 
-// const getById = async id => {
-// 	try {
-// 		const { data } = await Api.get(`/usuario/listarUsuarioComum/${id}`);
-// 		// console.log(data);
-// 		if (data) return data;
+const getById = async id => {
+	console.log(id);
+	try {
+		const { data } = await Api.get(`/curso/listarCurso/${id}`);
+		if (data) return data;
 
-// 		return new Error('Erro ao listar os registros');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao listar os registros');
-// 	}
-// };
+		return new Error('Erro ao listar os registros');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao listar os registros');
+	}
+};
 
 // const deleteById = async id => {
 // 	try {
@@ -65,7 +65,7 @@ const create = async datas => {
 
 const CursoService = {
 	getAll,
-	// getById,
+	getById,
 	// deleteById,
 	create,
 	// update,

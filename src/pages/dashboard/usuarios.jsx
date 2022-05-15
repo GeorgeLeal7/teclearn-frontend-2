@@ -157,16 +157,6 @@ const dashboard = () => {
 				label: 'Matérias',
 			},
 			{
-				icon: 'category',
-				path: '/dashboard/categorias',
-				label: 'Categorias',
-			},
-			{
-				icon: 'report_problem',
-				path: '/dashboard/denuncias',
-				label: 'Denúncias',
-			},
-			{
 				icon: 'gpp_good',
 				path: '/dashboard/administradores',
 				label: 'Administradores',

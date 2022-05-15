@@ -37,9 +37,6 @@ const CardAdd = ({findCursos}) => {
 	}, [busca]);
 
 
-
-	
-
 	const findAllMaterias = () => {
 		MateriaService.getAll(busca).then(result => {
 			if (result instanceof Error) {
@@ -53,10 +50,11 @@ const CardAdd = ({findCursos}) => {
 	};
 
 	const createCurso = () => {
+		console.log(idMaterias);
 		CursoService.create({
 			cursoNome,
 			cursoImagem: "imagem",
-			materias: idMaterias
+			materias: idMaterias.id
 		}).then((result) => {
 			setIdMaterias([]);
 			setCursoNome('');
@@ -68,7 +66,7 @@ const CardAdd = ({findCursos}) => {
 		var add = true
 		console.log(id.id);
 		idMaterias.length != 0  && idMaterias.map((idMateria, key) => {
-			if (idMateria == id.id) {
+			if (idMateria.id == id.id) {
 				idMaterias.splice(key, 1);
 				add = false;
 			}
@@ -175,12 +173,13 @@ const CardAdd = ({findCursos}) => {
 							</Box>
 
 							<Box
-								maxHeight="50%"
+								maxHeight="40%"
 								width="100%"
 								display="flex"
 								gap={1}
 								flexWrap="wrap"
-								overflow="scroll">
+								sx={{overflowX:"auto", overFlowY: "none"}}
+								>
 								{materias && materias.map((row,i) => (
 									<Chip
 										key={i}

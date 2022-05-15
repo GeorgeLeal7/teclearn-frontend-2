@@ -1,11 +1,18 @@
 import { Edit } from '@mui/icons-material';
 import { Box, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {useRouter} from 'next/router'
 
-const CardCurso = ({nome}) => {
+const CardCurso = ({id, nome}) => {
 	const theme = useTheme();
+	const router = useRouter();
 
 	const lgDown = useMediaQuery(theme.breakpoints.down(1400));
 	const exUp = useMediaQuery(theme.breakpoints.up(1900));
+
+
+	const  handleClickEdit = (id) =>{
+		router.push(`/dashboard/cursos/editar?id=${id}`);
+	}
 	return (
 		<>
 			<Box
@@ -54,7 +61,9 @@ const CardCurso = ({nome}) => {
 				marginTop={lgDown ? -28 : exUp ? -41 : -33}
 				display="flex"
 				justifyContent="center"
-				alignItems="center">
+				alignItems="center"
+				onClick={()=> handleClickEdit(id)}
+				>
 				<Edit
 					sx={{
 						width: '40%',

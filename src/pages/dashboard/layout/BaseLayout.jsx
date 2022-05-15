@@ -46,7 +46,7 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 							color="primary.contrastText"
 							fontFamily="poppins"
 							backgroundColor="primary.abc">
-							Controle de Usuários
+							Controle de {title + 's'}
 						</Typography>
 						<Typography
 							width={theme.spacing(36)}
@@ -54,7 +54,7 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 							fontFamily="poppins"
 							fontSize={22}
 							fontWeight="300">
-							Gerencie os usuários da plataforma.
+							Gerencie os {title + 's'} da plataforma.
 						</Typography>
 					</Box>
 					<Box
