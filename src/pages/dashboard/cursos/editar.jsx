@@ -4,6 +4,7 @@ import { MenuDrawer } from '../componnents/menuDrawer/MenuDrawer';
 import { useDrawerContext } from '../../../shared/contexts';
 import BaseLayout from '../layout/BaseLayout';
 import { CursoService } from '../services/api/curso/CursoService';
+import { CategoriaService } from '../services/api/categoria/CategoriaService';
 import { useRouter } from 'next/router';
 import { AddCircleOutline, Close } from '@mui/icons-material';
 import { ModalTitle } from '../componnents/Texts/ModalTitle';
@@ -16,8 +17,12 @@ const dashboard = () => {
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
 	const [curso, setCurso] = useState();
+	//materia selecionada
 	const [materia, setMateria] = useState();
+	const [categorias, setCategorias] = useState();
 	const [busca, setBusca] = useState();
+
+
 
 	const [open, setOpen] = useState(false);
 
@@ -28,7 +33,20 @@ const dashboard = () => {
 	const handleExcludeCategoria = () =>{
 
 	};
+	
+	const handleClickMateria = (materia) => {
+		setMateria(materia);
+		CategoriaService.getCategoriaByIdMateria(materia).then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setCategorias(result.tblMateriasCategorias);
+			}
+		});
 
+	}
+	
 	useEffect(()=>{
 		id && CursoService.getById(id).then(result => {
 			if (result instanceof Error) {
@@ -155,7 +173,7 @@ const dashboard = () => {
 										height={theme.spacing(7.5)} 
 										padding={2}
 										backgroundColor={materia == row.tblMateriaIdMateria?'#F4F4F4':''}
-										onClick={()=>setMateria(row.tblMateriaIdMateria)} 
+										onClick={()=>handleClickMateria(row.tblMateriaIdMateria)} 
 										sx={{cursor: 'pointer'}}
 										>
 										<Typography
@@ -232,37 +250,15 @@ const dashboard = () => {
 							gap={1}
 							padding={2}
 							sx={{paddingBottom: 10}}
-							>
+						>
+							{categorias && categorias.map((row) => (
+								
 								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
+								color="primary"
+								label={row.tblCategoria.categoriaNome}	
+								onDelete={handleExcludeCategoria}
+							/>
+							))}
 							
 							
 						</Grid>
@@ -293,7 +289,7 @@ const dashboard = () => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							padding={1}>
-							<ModalTitle>Cadastro de cursos</ModalTitle>
+							<ModalTitle>Adicionar Matéria</ModalTitle>
 							<IconButton
 								onClick={()=>setOpen(false)}
 								children={<Close />}
