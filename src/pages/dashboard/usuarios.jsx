@@ -68,6 +68,7 @@ const dashboard = () => {
 	const listUsers = () => {
 		UserService.getAll(
 			page,
+			limit,
 			filterTipo,
 			filterStatus,
 			filterModerador,
@@ -166,7 +167,7 @@ const dashboard = () => {
 
 	return (
 		<MenuDrawer>
-			<BaseLayout onClick={handleOpen} title="Usuário" pagination page={page} setPage={setPage} limit={limit} totalCount={totalCount}>
+			<BaseLayout onClick={handleOpen} title="Usuário" pagination page={page} setPage={setPage} limit={users.length} totalCount={totalCount}>
 				<UserToolbar
 					setBuscador={setBusca}
 					setOrder={setOrder}

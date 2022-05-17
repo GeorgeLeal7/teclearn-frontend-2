@@ -37,15 +37,21 @@ const dashboard = () => {
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
 	const [admins, setAdmins] = useState();
+	const [admin, setAdmin] = useState();
 	const [nome, setNome] = useState();
 	const [email, setEmail] = useState();
 
 	const [idAdmin, setIdAdmin] = useState();
 
+	const [isUpdate, setIsUpdate] = useState();
+
 	const [open, setOpen] = useState(false);
 	const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
 	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
+	const handleClose = () => {
+		setOpen(false);
+		setIsUpdate(false)
+	};
 
 	const createAdmin = ()=>{
 		AdminService.create({
@@ -59,10 +65,24 @@ const dashboard = () => {
 			listAdmins();
 		});
 	};
+
+	const updateAdmin = (id)=>{
+		AdminService.update({
+			nome: nome,
+			email: email,
+			senha: "123",
+			status: 1,
+			classificacao: "administrador"
+		}, id).then(() => {
+			setOpen(false);
+			listAdmins();
+		});
+	};
 	const listAdmins=() =>{
 		AdminService.getAll().then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
+				console.log(result.message);
 				return;
 			} else {
 				setAdmins(result);
@@ -75,6 +95,21 @@ const dashboard = () => {
 		 AdminService.deleteById(idAdmin);
 		listAdmins();
 		setOpenDeleteConfirm(false);
+	}
+
+	const handleClickEdit = (id) => {
+		setIsUpdate(true);
+		AdminService.getById(id).then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setNome(result.nome);
+				setEmail(result.email);
+				setIdAdmin(result.idUsuario);
+			}
+		});
+		setOpen(true);
 	}
 	useEffect(()=>{
 		listAdmins();
@@ -158,7 +193,7 @@ const dashboard = () => {
 												display="flex"
 												justifyContent="flex-end">
 												<IconButton
-													onClick={handleOpen}
+													onClick={()=>handleClickEdit(row.idUsuario)}
 													children={<Edit />}
 													sx={{ color: '#8BDF94' }}
 												/>
@@ -202,7 +237,7 @@ const dashboard = () => {
 								padding={0.5}>
 								<ModalTitle>Excluir Administrador</ModalTitle>
 								<IconButton
-									onClick={() => setOpeDeleteConfirm(false)}
+									onClick={() => setOpenDeleteConfirm(false)}
 									children={<Close />}
 									sx={{ color: '#FF6969' }}
 								/>
@@ -231,6 +266,7 @@ const dashboard = () => {
 								padding={1}>
 								<Button
 									variant="contained"
+									sx={{ textTransform: "capitalize" }}
 									onClick={handleClickDelete}>
 									Excluir
 								</Button>
@@ -264,7 +300,7 @@ const dashboard = () => {
 								justifyContent="space-between"
 								padding={1}>
 								<ModalTitle>
-									Cadastro de Administradores
+									{isUpdate?"Editar Administrador":"Cadastro de Administradores"}
 								</ModalTitle>
 								<IconButton
 									onClick={handleClose}
@@ -308,7 +344,7 @@ const dashboard = () => {
 								justifyContent="flex-start"
 								alignItems="flex-end"
 								padding={3}>
-								<Button variant="contained" onClick={()=> createAdmin()}>Cadastrar</Button>
+								<Button variant="contained" sx={{ textTransform: "capitalize" }}   onClick={() => { isUpdate ? updateAdmin(idAdmin) : createAdmin() }}>{isUpdate? "Atualizar" : ""}</Button>
 							</Grid>
 						</Grid>
 					</Box>

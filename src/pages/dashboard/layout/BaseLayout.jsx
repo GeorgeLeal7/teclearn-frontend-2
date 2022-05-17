@@ -96,9 +96,9 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 				</Box>
 				{pagination && (<Pagination
 					sx={{marginTop: 3}}
-				page={page}
-				count={Math.ceil(totalCount / limit)}
-				onChange={(e, newPage) => setPage(newPage)}
+					page={page}
+					count={Math.ceil(totalCount / 12)}
+					onChange={(e, newPage) => { setPage(newPage);  console.log(Math.ceil(totalCount / limit))}}
 			/>)}
 			</Container>
 		</Box>
