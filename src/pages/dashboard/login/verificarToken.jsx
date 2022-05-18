@@ -27,18 +27,18 @@ const dashboard = () => {
               fontWeight={600}
               color="#565656"
             >
-               Esqueceu a senha?
+               Codigo de autenticação
             </Typography>
             <Typography
               fontSize={18}
               fontWeight={400}  
               color="#737C88"
             >
-             Digite seu email para indentificarmos sua conta.
+             Acabamos de enviar um código para o e-mail junior***@gmail.com.
             </Typography>
           </Grid>
           <Grid item marginTop={4}>
-            <TextField fullWidth variant="standard" label="Confirme seu E-mail" placeholder='email.example@email.com' />
+            <TextField fullWidth variant="standard" label="Codigo" placeholder='******' />
           </Grid>
           
           <Grid item display="flex" alignItems="flex-end" justifyContent="flex-end" mt={5}>

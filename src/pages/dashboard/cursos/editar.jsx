@@ -4,6 +4,7 @@ import { MenuDrawer } from '../componnents/menuDrawer/MenuDrawer';
 import { useDrawerContext } from '../../../shared/contexts';
 import BaseLayout from '../layout/BaseLayout';
 import { CursoService } from '../services/api/curso/CursoService';
+import { MateriaService } from '../services/api/materia/MateriaService';
 import { CategoriaService } from '../services/api/categoria/CategoriaService';
 import { useRouter } from 'next/router';
 import { AddCircleOutline, Close } from '@mui/icons-material';
@@ -19,6 +20,8 @@ const dashboard = () => {
 	const [curso, setCurso] = useState();
 	//materia selecionada
 	const [materia, setMateria] = useState();
+	const [materias, setMaterias] = useState();
+	const [materiasSelectable, setMateriasSelectable] = useState();
 	const [categorias, setCategorias] = useState();
 	const [busca, setBusca] = useState();
 
@@ -54,10 +57,26 @@ const dashboard = () => {
 				return;
 			} else {
 				setCurso(result);
-				console.log(result);
+				setMaterias(result.tblCursosMaterias.map(row => row.tblMateriaIdMateria));
+				// console.log(result);
 			}
 		});
 	}, [id]);
+
+	useEffect(() => {
+		if (materias) {
+			console.log(materias)
+			MateriaService.getDifMateria(materias).then(result => {
+				if (result instanceof Error) {
+					alert(result.message);
+					return;
+				} else {
+					setMateriasSelectable(result);
+					console.log(result);
+				}
+			});
+		}
+	},[materias])
 
 	useEffect(() => {
 		handleSetDrawerOptions([
@@ -96,12 +115,12 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(8)}
+							height={theme.spacing(9)}
 							display="flex"
 							alignItems="flex-start"
 							justifyContent="space-between"
 						
-							padding={2}
+							padding={4}
 							>
 								<Typography
 									fontSize={xlDown ? (lgDown ? 20 : 24) : 28}
@@ -118,11 +137,11 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(7.5)}
+							height={theme.spacing(10)}
 							display="flex"
 							>
 							
-							<Box width="100%" height={theme.spacing(7.5)} padding={2} display="flex" justifyContent="space-between">
+							<Box width="100%" height={theme.spacing(7.5)} padding={4} display="flex" justifyContent="space-between">
 								<Typography
 									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
 									fontWeight="500"
@@ -172,6 +191,7 @@ const dashboard = () => {
 										width="100%" 
 										height={theme.spacing(7.5)} 
 										padding={2}
+										paddingLeft={4}
 										backgroundColor={materia == row.tblMateriaIdMateria?'#F4F4F4':''}
 										onClick={()=>handleClickMateria(row.tblMateriaIdMateria)} 
 										sx={{cursor: 'pointer'}}

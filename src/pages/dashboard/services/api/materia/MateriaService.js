@@ -13,18 +13,18 @@ const getAll = async (busca) => {
 	}
 };
 
-// const getById = async id => {
-// 	try {
-// 		const { data } = await Api.get(`/usuario/listarUsuarioComum/${id}`);
-// 		// console.log(data);
-// 		if (data) return data;
+const getDifMateria = async (materias) => {
+	try {
+		const { data } = await Api.post(`/curso/listarCursoMateriaRelacionado`, { materias: materias });
+		// console.log(data);
+		if (data) return data;
 
-// 		return new Error('Erro ao listar os registros');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao listar os registros');
-// 	}
-// };
+		return new Error('Erro ao listar os registros');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao listar os registros');
+	}
+};
 
 // const deleteById = async id => {
 // 	try {
@@ -64,6 +64,7 @@ const getAll = async (busca) => {
 
 const MateriaService = {
 	getAll,
+	getDifMateria
 	// getById,
 	// deleteById,
 	// create,
