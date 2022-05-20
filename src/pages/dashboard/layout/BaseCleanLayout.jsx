@@ -5,10 +5,11 @@ import {
 	Button,
 	useMediaQuery,
 	Typography,
+	Pagination,
 } from '@mui/material';
 import { theme } from '../../../shared/themes';
 
-const BaseCleanLayout = ({ title, subtitle, onClick, children }) => {
+const BaseCleanLayout = ({ title, subtitle, onClick, pagination, children, page, totalCount, setPage, limit}) => {
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -74,6 +75,12 @@ const BaseCleanLayout = ({ title, subtitle, onClick, children }) => {
 					alignSelf="center">
 					{children}
 				</Box>
+				{pagination && (<Pagination
+					sx={{marginTop: 3}}
+					page={page}
+					count={Math.ceil(totalCount / 7)}
+					onChange={(e, newPage) => { setPage(newPage);  console.log(page)}}
+			/>)}
 			</Container>
 		</Box>
 	);

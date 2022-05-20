@@ -240,7 +240,7 @@ const CardAdd = ({findCursos}) => {
 								variant="contained"
 								onClick={createCurso}
 							>
-								Cadastrar
+								Adicionar
 							</Button>
 						</Grid>
 					</Grid>

@@ -15,15 +15,18 @@ const dashboard = () => {
 	const exUp = useMediaQuery(theme.breakpoints.up(1900));
 
 	const [cursos, setCursos] = useState('');
+	const [page, setPage] = useState(1);
+	const [totalCount, setTotalCount] = useState(1);
 
 	const findAllCursos = () => {
-		CursoService.getAll().then(result => {
+		CursoService.getAll(page).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
 			} else {
-				
-				setCursos(result);
+				setTotalCount(result.size);
+				setCursos(result.cursos);
+			
 				// cursos(result);
 			}
 		});
@@ -69,7 +72,7 @@ const dashboard = () => {
 	
 	return (
 		<MenuDrawer>
-			<BaseCleanLayout>
+			<BaseCleanLayout pagination totalCount={totalCount} page={1} setPage={setPage} limit={cursos.length} >
 				<Grid container width="100%" height="100%">
 					{
 						cursos.length > 0 && cursos.map(curso => (	

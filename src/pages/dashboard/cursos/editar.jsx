@@ -72,11 +72,11 @@ const dashboard = () => {
 					return;
 				} else {
 					setMateriasSelectable(result);
-					console.log(result);
+					console.log(result)
 				}
 			});
 		}
-	},[materias])
+	}, [materias]);
 
 	useEffect(() => {
 		handleSetDrawerOptions([
@@ -360,9 +360,12 @@ const dashboard = () => {
 								flexWrap="wrap"
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
-							
-									<Chip
-										label="Curso de curso"/>
+									{
+										materiasSelectable && materiasSelectable[0].map((row, i) => (
+											<Chip key={i} label={row.materiaNome}/>
+										))
+									}
+									
 							</Box>
 							<Box
 								maxHeight="50%"
@@ -388,7 +391,7 @@ const dashboard = () => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								// onClick={createCurso}
+							
 							>
 								Cadastrar
 							</Button>
@@ -396,30 +399,7 @@ const dashboard = () => {
 					</Grid>
 				</Box>
 			</Modal>
-					<Box
-						width="100%"
-						height={theme.spacing(7)}
-						display="flex"
-						justifyContent="flex-end"
-						alignItems="flex-end"
-						padding={2}
-					>
-							<Button
-									sx={{
-									fontSize: xlDown ? lgDown ? 13 : 17 : 21,
-									fontWeight:"500",
-									fontFamily:"poppins",
-									textTransform: "capitalize",
-									display:"flex",
-									justifyContent:"center",
-									alignItems:"center",
-									}}
-									
-									endIcon={<AddCircleOutline />}
-									>
-									Adicionar Categoria
-								</Button>
-					</Box>
+					
 				</Box>
 			</BaseLayout>
 		</MenuDrawer>

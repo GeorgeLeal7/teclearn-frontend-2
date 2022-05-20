@@ -1,9 +1,9 @@
 import { Api } from '../axios-config';
 
-const getAll = async () => {
+const getAll = async (page) => {
 	try {
 		const { data } = await Api.get(
-			`/curso/listarCurso`
+			`/curso/listarCurso?page=${page}`
 		);
 		if (data) return data;
 
