@@ -78,7 +78,7 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(8)}
+							height={theme.spacing(6)}
 							display="flex"
 							alignItems="flex-start"
 							justifyContent="space-between"
@@ -86,7 +86,7 @@ const dashboard = () => {
 							padding={2}
 							>
 								<Typography
-									fontSize={xlDown ? (lgDown ? 20 : 24) : 28}
+									fontSize={24}
 									fontWeight="500"
 									fontFamily="poppins"
 									color="primary.fontMain"
@@ -116,10 +116,10 @@ const dashboard = () => {
 								</Typography>
 								<Box
 									width="50%"
-									height={35}
+									height={33}
 									backgroundColor="#E8EBEE"
 									borderRadius={2}>
-									<IconButton sx={{ marginTop: -0.5 }}>
+									<IconButton size="small"sx={{ marginTop: 0 }}>
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
@@ -206,12 +206,12 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(16)}
+							height={theme.spacing(11)}
 							display="flex"
 							alignItems="flex-end"
 							>
 							
-							<Box width="100%" height={theme.spacing(7.5)} padding={2} display="flex" justifyContent="space-between">
+							<Box width="100%" height={theme.spacing(5)} padding={2} display="flex" justifyContent="space-between">
 								<Typography
 									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
 									fontWeight="500"
@@ -229,36 +229,43 @@ const dashboard = () => {
 							xs={12}
 							display="flex"
 							alignItems="flex-start"
+							flexWrap="wrap"
 							gap={1}
 							padding={2}
 							sx={{paddingBottom: 10}}
 							>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
 								/>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
 								/>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
 								/>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
 								/>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
 								/>
 								<Chip
+									size="small"
 									color="primary"
 									label="JavaScript"	
 									onDelete={handleExcludeCategoria}
