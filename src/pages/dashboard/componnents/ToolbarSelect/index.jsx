@@ -46,7 +46,7 @@ export function ToolbarSelect({ label, options, setLabel, color, ...other }) {
 			{...other}>
 			<Typography
 				onClick={handleClickSelect}
-				fontSize={xlDown ? (lgDown ? 14 : 16) : 18}
+				fontSize={14}
 				fontWeight="500"
 				fontFamily="poppins"
 				color={color ? color : 'primary.fontMain'}

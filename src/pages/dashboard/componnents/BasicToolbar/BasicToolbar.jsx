@@ -12,7 +12,7 @@ const BasicToolbar = ({ title }) => {
 				<Grid
 					item
 					xs={8.6}
-					height={theme.spacing(10)}
+					height={theme.spacing(7)}
 					display="flex"
 					justifyContent="space-between"
 					alignItems="centers">
@@ -21,18 +21,19 @@ const BasicToolbar = ({ title }) => {
 				<Grid
 					item
 					xs={3.4}
-					height={theme.spacing(10)}
+					height={theme.spacing(7)}
 					display="flex"
 					justifyContent="space-between"
 					alignItems="centers">
+					
 					<Box
 						width="95%"
-						height={45}
+						height={32}
 						backgroundColor="#E8EBEE"
 						borderRadius={2}
-						padding={0.3}>
-						<IconButton>
-							<Icon>search</Icon>
+						>
+						<IconButton size="small">
+							<Icon >search</Icon>
 						</IconButton>
 						<InputBase
 							sx={{ ml: 1, flex: 1 }}

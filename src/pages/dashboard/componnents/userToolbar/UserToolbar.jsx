@@ -20,7 +20,7 @@ const UserToolbar = ({
 	return (
 		<Box>
 			<Grid container spacing={2}>
-				<Grid item xs={2.5} height={theme.spacing(7)}>
+				<Grid item xs={2.5} height={theme.spacing(4)}>
 					<TableTitle>Usuários</TableTitle>
 				</Grid>
 				<Grid
@@ -125,12 +125,12 @@ const UserToolbar = ({
 				<Grid item xs={3.4}>
 					<Box
 						width="95%"
-						height={40}
+						height={32}
 						backgroundColor="#E8EBEE"
 						borderRadius={2}
-						padding={0.3}>
-						<IconButton>
-							<Icon>search</Icon>
+						>
+						<IconButton size="small">
+							<Icon >search</Icon>
 						</IconButton>
 						<InputBase
 							sx={{ ml: 1, flex: 1 }}

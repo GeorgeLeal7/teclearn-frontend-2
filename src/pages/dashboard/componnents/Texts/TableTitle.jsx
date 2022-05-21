@@ -7,7 +7,7 @@ const TableTitle = ({ children }) => {
 
 	return (
 		<Typography
-			fontSize={xlDown ? 28 : 32}
+			fontSize={24}
 			fontFamily="poppins"
 			color="primary.fontMain">
 			{children}

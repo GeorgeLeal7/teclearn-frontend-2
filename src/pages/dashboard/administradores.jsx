@@ -155,13 +155,13 @@ const dashboard = () => {
 					<Table stickyHeader>
 						<TableHead backgroundColor="#fff">
 							<TableRow>
-								<TableCell width={theme.spacing(25)}>
+								<TableCell  width={theme.spacing(25)}>
 									<ColumnTitle> Nome</ColumnTitle>
 								</TableCell>
 								<TableCell width={theme.spacing(25)}>
 									<ColumnTitle> E-mail</ColumnTitle>
 								</TableCell>
-								<TableCell width={theme.spacing(8)}></TableCell>
+								<TableCell  width={theme.spacing(8)}></TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -174,16 +174,17 @@ const dashboard = () => {
 												i % 2 === 0 ? '#F1FBFF' : '#fff',
 										}}
 										>
-										<TableCell width={theme.spacing(65)}>
+										<TableCell size="small"width={theme.spacing(65)}>
 											<Text>
 												{row.nome}
 											</Text>
 										</TableCell>
 
-										<TableCell width={theme.spacing(70)}>
+										<TableCell size="small" width={theme.spacing(70)}>
 											{row.email}
 										</TableCell>
 										<TableCell
+											size="small"
 											width={theme.spacing(15)}
 											sx={{ overFlow: 'hidden' }}
 											display="flex"

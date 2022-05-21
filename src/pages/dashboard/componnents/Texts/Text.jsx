@@ -6,7 +6,7 @@ const Text = ({ children }) => {
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
 	return (
-		<Typography fontSize={14} fontFamily="roboto" color="primary.fontMain">
+		<Typography fontSize={13} fontFamily="roboto" color="primary.fontMain">
 			{children}
 		</Typography>
 	);

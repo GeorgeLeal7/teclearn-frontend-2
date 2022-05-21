@@ -177,12 +177,12 @@ const dashboard = () => {
 				/>
 				<TableContainer
 					width="100%"
-					height="90%"
-					sx={{ maxHeight: '90%' }}>
+					height="100%"
+					sx={{ maxHeight: '93%' }}>
 					<Table stickyHeader>
 						<TableHead backgroundColor="#fff">
 							<TableRow>
-								<TableCell width={theme.spacing(8)}>
+								<TableCell  width={theme.spacing(8)}>
 									<ColumnTitle> Perfil </ColumnTitle>
 								</TableCell>
 								<TableCell width={theme.spacing(25)}>
@@ -227,7 +227,7 @@ const dashboard = () => {
 										backgroundColor:
 											i % 2 === 0 ? '#F1FBFF' : '#fff',
 									}}>
-									<TableCell width={theme.spacing(8)}>
+									<TableCell size="small" width={theme.spacing(8)}>
 										<Avatar
 											sx={{
 												height: theme.spacing(6),
@@ -237,11 +237,12 @@ const dashboard = () => {
 											src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
 										/>
 									</TableCell>
-									<TableCell width={theme.spacing(10)}>
+									<TableCell size="small" width={theme.spacing(10)}>
 										<Text>{row.tblUsuario.nome}</Text>
 									</TableCell>
 
 									<TableCell
+										size="small"
 										width={theme.spacing(25)}
 										sx={{
 											display: xlDown
@@ -250,10 +251,11 @@ const dashboard = () => {
 										}}>
 										{row.tblUsuario.email}
 									</TableCell>
-									<TableCell width={theme.spacing(10)}>
+									<TableCell size="small"  width={theme.spacing(10)}>
 										{row.tblUsuario.classificacao}
 									</TableCell>
 									<TableCell
+										size="small"
 										width={theme.spacing(10)}
 										sx={{
 											display: xlDown
@@ -262,7 +264,7 @@ const dashboard = () => {
 										}}>
 										{row.pontuacao}
 									</TableCell>
-									<TableCell width={theme.spacing(10)}>
+									<TableCell size="small" width={theme.spacing(10)}>
 										<ReputationBar
 											color={
 												row.reputacao < 33
@@ -273,14 +275,14 @@ const dashboard = () => {
 											}
 										/>
 									</TableCell>
-									<TableCell width={theme.spacing(10)}>
+									<TableCell size="small" width={theme.spacing(10)}>
 										<Switch
 											checked={
 												row.moderador ? 'checked' : ''
 											}
 										/>
 									</TableCell>
-									<TableCell width={theme.spacing(10)}>
+									<TableCell size="small" width={theme.spacing(10)}>
 										<Switch
 											checked={
 												row.tblUsuario.status
@@ -290,6 +292,7 @@ const dashboard = () => {
 										/>
 									</TableCell>
 									<TableCell
+										size="small"
 										width={theme.spacing(15)}
 										sx={{ overFlow: 'hidden' }}
 										display="flex"

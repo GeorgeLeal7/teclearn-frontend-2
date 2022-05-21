@@ -32,7 +32,7 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 				}}>
 				<Box
 					width="100%"
-					height={theme.spacing(17)}
+					height={theme.spacing(14)}
 					display="flex"
 					justifyContent="space-between">
 					<Box
@@ -40,19 +40,21 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 						height={theme.spacing(14)}
 						display="flex"
 						flexDirection="column"
-						gap={3}>
+						gap={2}>
 						<Typography
 							variant={'h4'}
 							color="primary.contrastText"
 							fontFamily="poppins"
-							backgroundColor="primary.abc">
+							backgroundColor="primary.abc"
+							fontSize={28}
+							>
 							Controle de {title + 's'}
 						</Typography>
 						<Typography
 							width={theme.spacing(36)}
 							color="primary.contrastText"
 							fontFamily="poppins"
-							fontSize={22}
+							fontSize={20}
 							fontWeight="300">
 							Gerencie os {title + 's'} da plataforma.
 						</Typography>
@@ -66,12 +68,14 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 						alignItems="flex-end">
 						<Button
 							sx={{
+								textTransform: 'capitalize',
 								borderRadius: 5,
-								paddingTop: 0.5,
-								paddingBottom: 0.5,
-								paddingLeft: 4,
-								paddingRight: 4,
+								paddingTop: 0.2,
+								paddingBottom: 0.2,
+								paddingLeft: 2,
+								paddingRight: 2,
 							}}
+							size="small"
 							onClick={onClick}
 							color="info"
 							variant="outlined"
@@ -90,12 +94,12 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 					marginTop={1.4}
 					component={Paper}
 					elevation={3}
-					padding={2.5}
+					padding={2}
 					overflow="hidden">
 					{children}
 				</Box>
 				{pagination && (<Pagination
-					sx={{marginTop: 3}}
+					sx={{marginTop: 2}}
 					page={parseInt(page)}
 					count={Math.ceil(totalCount / 12)}
 					onChange={(e, newPage) => { setPage(newPage);  console.log(Math.ceil(totalCount / limit))}}

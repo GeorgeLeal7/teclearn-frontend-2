@@ -1,4 +1,4 @@
-import { Box, List, useTheme, IconButton } from '@mui/material';
+import { Box, List, useTheme, IconButton, Icon } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { Drawer } from '@mui/material';
 import { useDrawerContext } from '../../../../shared/contexts';
@@ -19,7 +19,7 @@ export const MenuDrawer = ({ children }) => {
 					sx={{
 						width: isDrawerOpen
 							? theme.spacing(34)
-							: theme.spacing(7),
+							: theme.spacing(6.5),
 						transition: theme.transitions.create(
 							['width', 'margin'],
 							{
@@ -39,14 +39,15 @@ export const MenuDrawer = ({ children }) => {
 						height="14%"
 						display="flex"
 						justifyContent="end">
-						<Box width={theme.spacing(6)} height={theme.spacing(6)}>
+						<Box width={theme.spacing(6)} height={theme.spacing(4)} display="flex" justifyContent="center">
 							<IconButton
+								size="small"
 								onClick={toggleDrawerOpen}
 								children={
 									isDrawerOpen ? (
-										<ArrowBack />
+										<Icon>chevron_left</Icon>
 									) : (
-										<ArrowForward />
+										<Icon>chevron_right</Icon>
 									)
 								}
 								sx={{ color: 'primary.contrastText' }}
@@ -67,13 +68,21 @@ export const MenuDrawer = ({ children }) => {
 							})}
 						</List>
 					</Box>
+					<Box marginTop={5}>
+						<ListItemLink 
+							color="#22507E"
+							icon='exit_to_app_icon'
+							path='/dashboard/login'
+							label='Sair'
+						/>
+					</Box>
 				</Box>
 			</Drawer>
 			<Box
 				sx={{
 					marginLeft: isDrawerOpen
 						? theme.spacing(34)
-						: theme.spacing(7),
+						: theme.spacing(6.5),
 					transition: theme.transitions.create(['width', 'margin'], {
 						easing: theme.transitions.easing.sharp,
 						duration: theme.transitions.duration.enteringScreen,

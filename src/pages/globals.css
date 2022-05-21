@@ -24,3 +24,7 @@ body{
 	background-color: #ffffff;
 	border: 0;
 }
+.MuiTableCell-sizeSmall{
+	padding: 4px;
+	height: 10px;
+}

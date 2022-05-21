@@ -7,7 +7,7 @@ const ColumnTitle = ({ children }) => {
 
 	return (
 		<Typography
-			fontSize={16}
+			fontSize={14}
 			fontWeight="400"
 			fontFamily="poppins"
 			color="primary.fontMain">
