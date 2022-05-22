@@ -238,7 +238,7 @@ const CardAdd = ({findCursos}) => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								onClick={createCurso}
+								onClick={()=> createCurso}
 							>
 								Adicionar
 							</Button>

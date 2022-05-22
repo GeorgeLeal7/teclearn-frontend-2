@@ -5,6 +5,7 @@ import { useDrawerContext } from '../../../../shared/contexts';
 import { ListItemLink } from '../listItemLink';
 import { Logo } from '../../../../../public/Logo';
 import { LogoName } from '../../../../../public/LogoName';
+import { textTransform } from '@mui/system';
 
 export const MenuDrawer = ({ children }) => {
 	const theme = useTheme();
@@ -54,7 +55,7 @@ export const MenuDrawer = ({ children }) => {
 										<Icon>chevron_right</Icon>
 									)
 								}
-								sx={{ color: 'primary.contrastText' }}
+								sx={{  color: 'primary.contrastText' }}
 							/>
 							{isDrawerOpen? (<LogoName width={130}/>) :  (<Logo width={30}/>)}
 							
@@ -76,6 +77,7 @@ export const MenuDrawer = ({ children }) => {
 					</Box>
 					<Box marginTop={5}>
 						<ListItemLink 
+							rotate={{transform: 'rotate(180deg)',}}
 							color="#22507E"
 							icon='exit_to_app_icon'
 							path='/dashboard/login'

@@ -22,6 +22,7 @@ const dashboard = () => {
 	const [materia, setMateria] = useState();
 	const [materias, setMaterias] = useState();
 	const [materiasSelectable, setMateriasSelectable] = useState();
+	const [selectNewMateria, setSelectNewMateria] = useState([]);
 	const [categorias, setCategorias] = useState();
 	const [busca, setBusca] = useState();
 
@@ -47,9 +48,31 @@ const dashboard = () => {
 				setCategorias(result.tblMateriasCategorias);
 			}
 		});
-
 	}
 	
+	const handleClickChip = (id) => {
+		var add = true
+		console.log(id.id);
+		selectNewMateria.length != 0  && selectNewMateria.map((idMateria, key) => {
+			if (idMateria.id == id.id) {
+				selectNewMateria.splice(key, 1);
+				add = false;
+			}
+		})
+		if (add) setSelectNewMateria([...selectNewMateria, id]);
+		console.log(selectNewMateria)
+	
+	};
+	const handleCreateRelationship = () =>{
+		selectNewMateria && selectNewMateria.map((row)=>{
+			console.log(row)
+			CursoService.createMateriaCurso({
+				tblCursoIdCurso: id,
+				tblMateriaIdMateria: row.id,
+			});
+		});
+	}
+
 	useEffect(()=>{
 		id && CursoService.getById(id).then(result => {
 			if (result instanceof Error) {
@@ -278,7 +301,6 @@ const dashboard = () => {
 								color="primary"
 								label={row.tblCategoria.categoriaNome}	
 								onDelete={handleExcludeCategoria}
-								onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
 							/>
 							))}
 							
@@ -365,7 +387,10 @@ const dashboard = () => {
 								>
 									{
 										materiasSelectable && materiasSelectable[0].map((row, i) => (
-											<Chip key={i} label={row.materiaNome}/>
+											<Chip 
+												key={i} 
+												label={row.materiaNome} 
+												onClick={() => handleClickChip({ id: row.idMateria})}/>
 										))
 									}
 									
@@ -394,7 +419,7 @@ const dashboard = () => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-							
+								onClick={()=>handleCreateRelationship()}
 							>
 								Cadastrar
 							</Button>

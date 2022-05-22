@@ -13,6 +13,8 @@ const CardCurso = ({id, nome, foto}) => {
 	const  handleClickEdit = (id) =>{
 		router.push(`/dashboard/cursos/editar?id=${id}`);
 	}
+
+	
 	return (
 		<>
 			<Box

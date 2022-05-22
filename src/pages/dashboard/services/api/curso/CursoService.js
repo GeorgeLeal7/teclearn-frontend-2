@@ -48,6 +48,18 @@ const create = async datas => {
 	}
 };
 
+const createMateriaCurso = async datas =>{
+	try {
+		const { data } = await Api.post(`/cursomateria/inserirCursoMateria`, datas);
+		if (data) return data.id;
+
+		return new Error('Erro ao criar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao criar o registro');
+	}
+}
+
 // const update = async (datas, id) => {
 // 	try {
 // 		const { data } = await Api.put(
@@ -66,6 +78,7 @@ const create = async datas => {
 const CursoService = {
 	getAll,
 	getById,
+	createMateriaCurso,
 	// deleteById,
 	create,
 	// update,

@@ -2,15 +2,15 @@ import { Api } from '../axios-config';
 
 const getAll = async (busca) => {
 	try {
-		const { data } = await Api.get(`/materia/listarMateria${busca && '?busca=' + busca}`);
+		const { data } = await Api.get(`/materia/listarMateria?${busca && 'busca=' + busca}`);
 		if (data) return data;
-		console.log(`/materia/listarMateria/${busca && 'busca=' + busca}`);
+	// 	console.log(`/materia/listarMateria/${busca && 'busca=' + busca}`);
 		console.log(data);
 		return new Error('Erro ao listar os registros');
 	} catch (error) {
 		console.log(error);
 		return new Error(error.message || 'Erro ao listar os registros');
-	}
+	};
 };
 
 const getDifMateria = async (materias) => {

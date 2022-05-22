@@ -9,7 +9,7 @@ import {
 	useMediaQuery,
 } from '@mui/material';
 
-const ListItemLink = ({ path, icon, label, onClick, color }) => {
+const ListItemLink = ({ path, icon, label, onClick, color, rotate }) => {
 	const theme = useTheme();
 	const router = useRouter();
 	const mdDown = useMediaQuery(theme.breakpoints.down('md'));
@@ -32,7 +32,7 @@ const ListItemLink = ({ path, icon, label, onClick, color }) => {
 				overflow: 'hidden',
 			}}>
 			<ListItemIcon >
-				<Icon sx={{ '&.material-icons':{
+				<Icon  sx={{ ...rotate , '&.material-icons':{
 					fontSize: 20
 				}, color: 'primary.contrastText' }}>{icon}</Icon>
 			</ListItemIcon>

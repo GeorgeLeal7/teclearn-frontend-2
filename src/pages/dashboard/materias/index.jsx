@@ -7,6 +7,7 @@ import { CursoService } from '../services/api/curso/CursoService';
 import { useRouter } from 'next/router';
 import { AddCircleOutline, Close } from '@mui/icons-material';
 import { ModalTitle } from '../componnents/Texts/ModalTitle';
+import { MateriaService } from '../services/api/materia/MateriaService';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -16,6 +17,7 @@ const dashboard = () => {
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
 	const [curso, setCurso] = useState();
+	const [materias, setMaterias] = useState();
 	const [materia, setMateria] = useState();
 	const [busca, setBusca] = useState();
 
@@ -30,12 +32,12 @@ const dashboard = () => {
 	};
 
 	useEffect(()=>{
-		id && CursoService.getById(id).then(result => {
+		MateriaService.getAll().then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
 			} else {
-				setCurso(result);
+				setMaterias(result);
 				console.log(result);
 			}
 		});
@@ -75,28 +77,7 @@ const dashboard = () => {
 			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Materia">
 				<Box width="50%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
 					<Grid container width="100%">
-						<Grid
-							item
-							xs={12}
-							height={theme.spacing(6)}
-							display="flex"
-							alignItems="flex-start"
-							justifyContent="space-between"
 						
-							padding={2}
-							>
-								<Typography
-									fontSize={24}
-									fontWeight="500"
-									fontFamily="poppins"
-									color="primary.fontMain"
-									display="flex"
-									justifyContent="center"
-									alignItems="center">
-										Ciência da Computação
-								</Typography>
-							
-						</Grid>
 						<Grid
 							item
 							xs={12}
@@ -106,7 +87,7 @@ const dashboard = () => {
 							
 							<Box width="100%" height={theme.spacing(7.5)} padding={2} display="flex" justifyContent="space-between">
 								<Typography
-									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
+									fontSize={21}
 									fontWeight="500"
 									fontFamily="poppins"
 									color="primary.fontMain"
@@ -149,13 +130,13 @@ const dashboard = () => {
 							
 							
 							{
-								curso && curso.length != 0 && curso.tblCursosMaterias.map((row)=>(
+								materias && materias.length != 0 && materias.map((row)=>(
 									<Box 
 										width="100%" 
 										height={theme.spacing(7.5)} 
 										padding={2}
-										backgroundColor={materia == row.tblMateriaIdMateria?'#F4F4F4':''}
-										onClick={()=>setMateria(row.tblMateriaIdMateria)} 
+										backgroundColor={materia == row.idMateria?'#F4F4F4':''}
+										onClick={()=>setMateria(row.idMateria)} 
 										sx={{cursor: 'pointer'}}
 										>
 										<Typography
@@ -165,7 +146,7 @@ const dashboard = () => {
 											color="primary.fontMain"
 											display="flex"
 											>
-											{row.tblMateria.materiaNome}
+											{row.materiaNome}
 										</Typography>
 									</Box>
 									))
@@ -206,14 +187,14 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(11)}
+							height={theme.spacing(7)}
 							display="flex"
-							alignItems="flex-end"
+							alignItems="flex-start"
 							>
 							
 							<Box width="100%" height={theme.spacing(5)} padding={2} display="flex" justifyContent="space-between">
 								<Typography
-									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
+									fontSize={21}
 									fontWeight="500"
 									fontFamily="poppins"
 									color="primary.fontMain"
