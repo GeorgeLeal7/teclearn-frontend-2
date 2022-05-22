@@ -115,15 +115,15 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(9)}
+							height={theme.spacing(6)}
 							display="flex"
 							alignItems="flex-start"
 							justifyContent="space-between"
 						
-							padding={4}
+							padding={2}
 							>
 								<Typography
-									fontSize={xlDown ? (lgDown ? 20 : 24) : 28}
+									fontSize={24}
 									fontWeight="500"
 									fontFamily="poppins"
 									color="primary.fontMain"
@@ -137,11 +137,11 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(10)}
+							height={theme.spacing(7.5)}
 							display="flex"
 							>
 							
-							<Box width="100%" height={theme.spacing(7.5)} padding={4} display="flex" justifyContent="space-between">
+							<Box width="100%" height={theme.spacing(7.5)} padding={2} display="flex" justifyContent="space-between">
 								<Typography
 									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
 									fontWeight="500"
@@ -153,10 +153,10 @@ const dashboard = () => {
 								</Typography>
 								<Box
 									width="50%"
-									height={35}
+									height={33}
 									backgroundColor="#E8EBEE"
 									borderRadius={2}>
-									<IconButton sx={{ marginTop: -0.5 }}>
+									<IconButton size="small"sx={{ marginTop: 0 }}>
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
@@ -189,7 +189,7 @@ const dashboard = () => {
 								curso && curso.length != 0 && curso.tblCursosMaterias.map((row)=>(
 									<Box 
 										width="100%" 
-										height={theme.spacing(7.5)} 
+										height={theme.spacing(6.5)} 
 										padding={2}
 										paddingLeft={4}
 										backgroundColor={materia == row.tblMateriaIdMateria?'#F4F4F4':''}
@@ -244,12 +244,12 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={theme.spacing(16)}
+							height={theme.spacing(11)}
 							display="flex"
 							alignItems="flex-end"
 							>
 							
-							<Box width="100%" height={theme.spacing(7.5)} padding={2} display="flex" justifyContent="space-between">
+							<Box width="100%" height={theme.spacing(5)} padding={2} display="flex" justifyContent="space-between">
 								<Typography
 									fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
 									fontWeight="500"
@@ -274,9 +274,11 @@ const dashboard = () => {
 							{categorias && categorias.map((row) => (
 								
 								<Chip
+								size="small"
 								color="primary"
 								label={row.tblCategoria.categoriaNome}	
 								onDelete={handleExcludeCategoria}
+								onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
 							/>
 							))}
 							
@@ -358,6 +360,7 @@ const dashboard = () => {
 								display="flex"
 								gap={1}
 								flexWrap="wrap"
+							
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 									{

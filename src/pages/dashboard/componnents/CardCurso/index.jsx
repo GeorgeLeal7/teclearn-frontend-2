@@ -2,7 +2,7 @@ import { Edit } from '@mui/icons-material';
 import { Box, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {useRouter} from 'next/router'
 
-const CardCurso = ({id, nome}) => {
+const CardCurso = ({id, nome, foto}) => {
 	const theme = useTheme();
 	const router = useRouter();
 
@@ -31,7 +31,7 @@ const CardCurso = ({id, nome}) => {
 					}}
 					width="100%"
 					height="70%"
-					src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"></Box>
+					src={foto}></Box>
 
 				<Box width="100%" height="30%" padding={1}>
 					<Typography

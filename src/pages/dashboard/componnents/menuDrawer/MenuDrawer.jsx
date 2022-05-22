@@ -3,6 +3,8 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { Drawer } from '@mui/material';
 import { useDrawerContext } from '../../../../shared/contexts';
 import { ListItemLink } from '../listItemLink';
+import { Logo } from '../../../../../public/Logo';
+import { LogoName } from '../../../../../public/LogoName';
 
 export const MenuDrawer = ({ children }) => {
 	const theme = useTheme();
@@ -39,8 +41,10 @@ export const MenuDrawer = ({ children }) => {
 						height="14%"
 						display="flex"
 						justifyContent="end">
-						<Box width={theme.spacing(6)} height={theme.spacing(4)} display="flex" justifyContent="center">
+						<Box width="100%" height={theme.spacing(10)} paddingRight={1} display="flex" flexDirection={isDrawerOpen? "row-reverse" : "column"} justifyContent="flex-start"  alignItems="center" gap={isDrawerOpen? 6: 1}>
+							
 							<IconButton
+								
 								size="small"
 								onClick={toggleDrawerOpen}
 								children={
@@ -52,6 +56,8 @@ export const MenuDrawer = ({ children }) => {
 								}
 								sx={{ color: 'primary.contrastText' }}
 							/>
+							{isDrawerOpen? (<LogoName width={130}/>) :  (<Logo width={30}/>)}
+							
 						</Box>
 					</Box>
 					<Box>

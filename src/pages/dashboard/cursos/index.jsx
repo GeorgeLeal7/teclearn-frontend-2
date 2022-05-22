@@ -88,7 +88,7 @@ const dashboard = () => {
 										: theme.spacing(35)
 									}
 								padding={1}>
-									<CardCurso id={curso.idCurso} nome={curso.cursoNome} imagem={curso.cursoImagem} />
+									<CardCurso id={curso.idCurso} foto={curso.cursoImagem} nome={curso.cursoNome} imagem={curso.cursoImagem} />
 								</Grid>
 							)
 						)
