@@ -199,6 +199,7 @@ const dashboard = () => {
 						</Grid>
 						<Grid
 							item
+							maxHeight={325}
 							xs={12}
 							display="flex"
 							flexDirection="column"

@@ -35,17 +35,17 @@ const getDifMateria = async (materias) => {
 // 	}
 // };
 
-// const create = async datas => {
-// 	try {
-// 		const { data } = await Api.post(`/usuario/inserirUsuarioComum`, datas);
-// 		if (data) return data.id;
+const create = async datas => {
+	try {
+		const { data } = await Api.post(`/materia/inserirMateria`, datas);
+		if (data) return data.id;
 
-// 		return new Error('Erro ao criar o registro');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao criar o registro');
-// 	}
-// };
+		return new Error('Erro ao criar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao criar o registro');
+	}
+};
 
 // const update = async (datas, id) => {
 // 	try {
@@ -64,10 +64,10 @@ const getDifMateria = async (materias) => {
 
 const MateriaService = {
 	getAll,
-	getDifMateria
+	getDifMateria,
 	// getById,
 	// deleteById,
-	// create,
+	create,
 	// update,
 };
 

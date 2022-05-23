@@ -1,17 +1,16 @@
 import { Api } from '../axios-config';
 
-// const getAll = async (busca) => {
-// 	try {
-// 		const { data } = await Api.get(`/materia/listarMateria${busca && '?busca=' + busca}`);
-// 		if (data) return data;
-// 		console.log(`/materia/listarMateria/${busca && 'busca=' + busca}`);
-// 		console.log(data);
-// 		return new Error('Erro ao listar os registros');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao listar os registros');
-// 	}
-// };
+const getAll = async () => {
+	try {
+		const { data } = await Api.get(`/categoria/listarCategoria`);
+		if (data) return data;
+		console.log(data);
+		return new Error('Erro ao listar os registros');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao listar os registros');
+	}
+};
 const getCategoriaByIdMateria = async (id) => {
 	try {
 		const { data } = await Api.get(`/materia/listarMateria/${id}`);
@@ -75,7 +74,7 @@ const getCategoriaByIdMateria = async (id) => {
 // };
 
 const CategoriaService = {
-	// getAll,
+	getAll,
 	getCategoriaByIdMateria
 	// getById,
 	// deleteById,

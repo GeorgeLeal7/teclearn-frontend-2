@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { AddCircleOutline, Close } from '@mui/icons-material';
 import { ModalTitle } from '../componnents/Texts/ModalTitle';
 import { MateriaService } from '../services/api/materia/MateriaService';
+import { CategoriaService } from '../services/api/categoria/CategoriaService';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -19,7 +20,14 @@ const dashboard = () => {
 	const [curso, setCurso] = useState();
 	const [materias, setMaterias] = useState();
 	const [materia, setMateria] = useState();
+	const [materiasSelectable, setMateriasSelectable] = useState();	
 	const [busca, setBusca] = useState();
+
+	const [categorias, setCategorias] = useState();
+	const [categoriaByMateria, setCategoriaByMateria] = useState();
+	const [selectCategoria, setSelectCategoria] = useState([]);
+
+	const [materiaNome, setMateriaNome] = useState();
 
 	const [open, setOpen] = useState(false);
 
@@ -42,6 +50,52 @@ const dashboard = () => {
 			}
 		});
 	}, [id]);
+
+	const findAllCategorias = () => {
+		CategoriaService.getAll().then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setCategorias(result);
+				console.log(result);
+			}
+		});
+	}
+	const handleClickChip = (id) => {
+		var add = true
+		console.log(id.id);
+		selectCategoria.length != 0  && selectCategoria.map((idCategoria, key) => {
+			if (idCategoria.id == id.id) {
+				selectNewMateria.splice(key, 1);
+				add = false;
+			}
+		})
+		if (add) setSelectCategoria([...selectCategoria, id]);
+		console.log(selectCategoria)
+	
+	};
+
+
+	const createMateria = () => {
+		MateriaService.create({
+			materiaNome
+		}).then((result) => {
+			setMateriaNome('');
+		});
+	}
+
+	const getCategoriaByMateria = () => {
+		CategoriaService.getAll(materia).then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setCategoriaByMateria(result);
+				console.log(result);
+			}
+		});
+	};
 
 	useEffect(() => {
 		handleSetDrawerOptions([
@@ -121,6 +175,7 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
+							height={325}
 							display="flex"
 							flexDirection="column"
 							alignItems="flex-start"
@@ -133,10 +188,10 @@ const dashboard = () => {
 								materias && materias.length != 0 && materias.map((row)=>(
 									<Box 
 										width="100%" 
-										height={theme.spacing(7.5)} 
+										height={theme.spacing(6.5)} 
 										padding={2}
 										backgroundColor={materia == row.idMateria?'#F4F4F4':''}
-										onClick={()=>setMateria(row.idMateria)} 
+										onClick={()=>{setMateria(row.idMateria); getCategoriaByMateria()}} 
 										sx={{cursor: 'pointer'}}
 										>
 										<Typography
@@ -172,10 +227,10 @@ const dashboard = () => {
 									justifyContent:"center",
 									alignItems:"center",
 									}}
-									onClick={()=>setOpen(true)}
+									onClick={()=>{setOpen(true); findAllCategorias()}}
 									endIcon={<AddCircleOutline />}
 									>
-									Adicionar Materia
+									Cadastrar Materia
 								</Button>
 					</Box>
 				
@@ -215,43 +270,19 @@ const dashboard = () => {
 							padding={2}
 							sx={{paddingBottom: 10}}
 							>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-								<Chip
-									size="small"
-									color="primary"
-									label="JavaScript"	
-									onDelete={handleExcludeCategoria}
-								/>
-							
+								{
+									categoriaByMateria && categoriaByMateria.map((row)=>(
+										<Chip
+										key={row.idCategoria}
+										size="small"
+										color="primary"
+										label={row.categoriaNome}	
+										onDelete={handleExcludeCategoria}
+									/>
+									))
+								}
+								
+								
 							
 						</Grid>
 						
@@ -281,7 +312,7 @@ const dashboard = () => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							padding={1}>
-							<ModalTitle>Cadastro de cursos</ModalTitle>
+							<ModalTitle>Cadastrar Matéria</ModalTitle>
 							<IconButton
 								onClick={()=>setOpen(false)}
 								children={<Close />}
@@ -291,7 +322,18 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height="80%"
+							height="10%"
+							padding={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
+							</Grid>
+						<Grid
+							marginTop={4}
+							item
+							xs={12}
+							height="60%"
 							padding={3}
 							display="flex"
 							flexDirection="column"
@@ -302,7 +344,7 @@ const dashboard = () => {
 								height={30}
 								display="flex"
 								justifyContent="space-between">
-								<ModalTitle>Matérias</ModalTitle>
+								<ModalTitle>Categoria</ModalTitle>
 								<Box
 									width="60%"
 									height={30}
@@ -330,11 +372,18 @@ const dashboard = () => {
 								display="flex"
 								gap={1}
 								flexWrap="wrap"
+							
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
-							
-									<Chip
-										label="Curso de curso"/>
+									{
+										categorias && categorias.map((row, i) => (
+											<Chip 
+												key={i} 
+												label={row.categoriaNome} 
+												onClick={() => handleClickChip({ id: row.idCategoria})}/>
+										))
+									}
+									
 							</Box>
 							<Box
 								maxHeight="50%"
@@ -360,7 +409,7 @@ const dashboard = () => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								// onClick={createCurso}
+								onClick={()=>createMateria()}
 							>
 								Cadastrar
 							</Button>
