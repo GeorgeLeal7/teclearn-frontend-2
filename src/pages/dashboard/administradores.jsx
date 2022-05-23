@@ -29,6 +29,7 @@ import { ModalTitle } from './componnents/Texts/ModalTitle';
 import { ToolbarSelect } from './componnents/ToolbarSelect';
 import BasicToolbar from './componnents/BasicToolbar/BasicToolbar';
 import { AdminService } from './services/api/administrador/AdminService';
+import { parseCookies } from 'nookies';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -353,6 +354,23 @@ const dashboard = () => {
 			</BaseLayout>
 		</MenuDrawer>
 	);
+};
+
+export const getServerSideProps = async ({ req }) => {
+	const { ['teclearn.token']: token } = parseCookies({ req });
+
+	if (!token) {
+		return {
+			redirect: {
+				destination: '/dashboard/login',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
 };
 
 export default dashboard;

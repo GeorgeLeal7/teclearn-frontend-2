@@ -6,6 +6,7 @@ import BaseCleanLayout from '../layout/BaseCleanLayout';
 import { CardCurso } from '../componnents/CardCurso';
 import { CardAdd } from '../componnents/CardAdd';
 import { CursoService } from '../services/api/curso/CursoService';
+import { parseCookies } from 'nookies';
 
 const dashboard = () => {
 	const theme = useTheme();
@@ -132,6 +133,23 @@ const dashboard = () => {
 			</BaseCleanLayout>
 		</MenuDrawer>
 	);
+};
+
+export const getServerSideProps = async ({ req }) => {
+	const { ['teclearn.token']: token } = parseCookies({ req });
+
+	if (!token) {
+		return {
+			redirect: {
+				destination: '/dashboard/login',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
 };
 
 export default dashboard;

@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import { theme } from '../../../shared/themes';
 
-import {Logo} from "../../../../public/Logo"
+import { LogoDefault } from '../../../../public/LogoDefault';
 
 
 const BaseLoginLayout = ({ children }) => {
@@ -26,7 +26,7 @@ const BaseLoginLayout = ({ children }) => {
 				{children}
 			</Box>
 			<Box position="absolute" sx={{zIndex: 10}} marginTop={-72} marginLeft={5}>
-			<Logo width={50} />
+			<LogoDefault width={50} />
 			</Box>
 			
 		</>

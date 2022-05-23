@@ -33,6 +33,7 @@ import { CardUser } from './componnents/CardUser';
 import { UserService } from './services/api/user/UserService';
 import { check } from 'prettier';
 import { EditUser } from './componnents/EditUser';
+import { parseCookies } from 'nookies';
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
 	const theme = useTheme();
@@ -545,5 +546,24 @@ const dashboard = () => {
 		</MenuDrawer>
 	);
 };
+
+
+export const getServerSideProps = async ({ req }) => {
+	const { ['teclearn.token']: token } = parseCookies({ req });
+
+	if (!token) {
+		return {
+			redirect: {
+				destination: '/dashboard/login',
+				permanent: false,
+			},
+		};
+	}
+
+	return {
+		props: {},
+	};
+};
+
 
 export default dashboard;
