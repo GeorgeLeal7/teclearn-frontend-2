@@ -6,7 +6,7 @@ import { LoginService } from '../../pages/dashboard/services/api/login/LoginServ
 const AuthAdmContext = createContext();
 
 const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState();
 	const isAuthenticated = !!user;
 
 
@@ -22,9 +22,24 @@ const AuthProvider = ({ children }) => {
 			setCookie(null, 'teclearn.token', result.token, {
 				maxAge: 60 * 60 * 1, // 1 hour
 			});
+			setCookie(null, 'primeiroAcesso', result.usuario.primeiroAcesso, {
+				maxAge: 60 * 60 * 1, // 1 hour
+			});
+			setCookie(null, 'idUsuario', result.usuario.idUsuario, {
+				maxAge: 60 * 60 * 1, // 1 hour
+			});
+			console.log(result);
+			if (result.usuario.primeiroAcesso) {
+				window.location.href = '/dashboard/login/primeiroAcesso';
+				console.log(user);
+				console.log(result);
+				
+			} else {
+				window.location.href = '/dashboard/geral';
+			}
 
-			setUser(result.admin);
-			window.location.href = '/dashboard/geral';
+			
+			
 		});
 	};
 

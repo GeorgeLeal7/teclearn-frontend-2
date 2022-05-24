@@ -2,15 +2,49 @@ import { useTheme } from '@emotion/react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, capitalize, Grid, IconButton, InputAdornment, Link, Paper, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
+
+
+import { AuthAdmContext } from '../../../shared/contexts/AuthAdmContext';
+import { parseCookies } from 'nookies';
+import { AdminService } from '../services/api/administrador/AdminService';
 
 
 const dashboard = () => {
   const theme = useTheme();
+  const { user } = useContext(AuthAdmContext);
+  console.log(user);
   
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+
+
+  const handleClickAlterPassword = () => {
+    const {idUsuario} = parseCookies();
+    if (password == confirmPassword) {
+      AdminService.update(
+        {
+          senha: password,
+          primeiroAcesso: false
+        },
+        idUsuario
+      ).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+          return;
+        } 
+      });
+      destroyCookie(null, 'primeiroAcesso');
+      window.location.href = '/dashboard/geral';
+    }
+
+    
+  };
 
 
 	
@@ -43,7 +77,7 @@ const dashboard = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <TextField fullWidth variant="standard" label="Nova senha " type={showPassword? 'text' : 'password'} InputProps={{
+            <TextField value={password} onChange={(e)=>setPassword(e.target.value)}fullWidth variant="standard" label="Nova senha " type={showPassword? 'text' : 'password'} InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -59,7 +93,7 @@ const dashboard = () => {
             />
           </Grid>
           <Grid item display="flex" flexDirection="column">
-            <TextField fullWidth variant="standard" label="Confirme sua senha" type={showPassword2 ? 'text' : 'password'} InputProps={{
+            <TextField value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}fullWidth variant="standard" label="Confirme sua senha" type={showPassword2 ? 'text' : 'password'} InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -76,7 +110,7 @@ const dashboard = () => {
            
           </Grid>
           <Grid item display="flex" alignItems="flex-end" justifyContent="flex-end" mt={5}>
-            <Button variant='contained' size="small" sx={{textTransform: "capitalize", width: 100}}>Entrar</Button>
+            <Button onClick={()=> handleClickAlterPassword()} variant='contained' size="small" sx={{textTransform: "capitalize", width: 100}}>Entrar</Button>
           </Grid>
         </Grid>
         </Box>
