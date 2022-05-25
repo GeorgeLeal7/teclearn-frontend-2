@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { Button, capitalize, Grid, Link, Paper, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useRouter } from 'next/router';
 import { setCookie } from 'nookies';
 import { useState } from 'react';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
@@ -9,6 +10,7 @@ import { LoginService } from '../services/api/login/LoginService';
 
 const dashboard = () => {
   const theme = useTheme();
+  const router = useRouter();
   const [email, setEmail] = useState();
 
   const handleClickSendEmail = () => {
@@ -18,11 +20,18 @@ const dashboard = () => {
       if (result instanceof Error) {
         alert(result.message);
         return;
-      } else{
+      } else if(result.token){
         console.log(result);
-        setCookie(null, 'teclearn.newPasswordToken', result.token, {
+        setCookie(null, 'newPasswordToken', result.token, {
           maxAge: 60 * 60 * 1, // 1 hour
         });
+        setCookie(null, 'idUsuario', result.idUsuario, {
+          maxAge: 60 * 60 * 1, // 1 hour
+        });
+        setCookie(null, 'email', result.email, {
+          maxAge: 60 * 60 * 1, // 1 hour
+        });
+        router.push('/dashboard/login/verificarToken');
       }
     });
   }

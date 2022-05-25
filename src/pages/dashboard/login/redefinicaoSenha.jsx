@@ -5,13 +5,41 @@ import { Box } from '@mui/system';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import { destroyCookie, parseCookies } from 'nookies';
+import { AdminService } from '../services/api/administrador/AdminService';
 
 
 const dashboard = () => {
-	const theme = useTheme();
-    const [showPassword, setShowPassword] = useState(false);
-    const [showPassword2, setShowPassword2] = useState(false);
+  const theme = useTheme();
+  const router = useRouter();
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
+    const handleClickAlterPassword = () => {
+    const {idUsuario} = parseCookies();
+    if (password == confirmPassword) {
+      AdminService.update(
+        {
+          senha: password,
+        },
+        idUsuario
+      ).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+          return;
+        } 
+      });
+      // destroyCookie(null, 'primeiroAcesso');
+      router.push('/dashboard/login');
+    }
+    };
+  
+ 
 	
 	return (
 			<BaseLoginLayout>
@@ -36,7 +64,7 @@ const dashboard = () => {
            
           </Grid>
           <Grid item>
-            <TextField fullWidth variant="standard" label="Nova senha " type={showPassword2 ? 'text' : 'password'}  InputProps={{
+            <TextField value={password} onChange={(e)=>setPassword(e.target.value)} fullWidth variant="standard" label="Nova senha " type={showPassword2 ? 'text' : 'password'}  InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">
                     <IconButton
@@ -51,7 +79,7 @@ const dashboard = () => {
             }}/>
           </Grid>
           <Grid item display="flex" flexDirection="column">
-            <TextField fullWidth variant="standard" label="Confirme sua senha" type={showPassword ? 'text' : 'password'} InputProps={{
+            <TextField value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} fullWidth variant="standard" label="Confirme sua senha" type={showPassword ? 'text' : 'password'} InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">
                     <IconButton
@@ -67,7 +95,7 @@ const dashboard = () => {
            
           </Grid>
           <Grid item display="flex" alignItems="flex-end" justifyContent="flex-end" mt={5}>
-            <Button variant='contained' size="small" sx={{textTransform: "capitalize", width: 100}}>Entrar</Button>
+            <Button onClick={()=>handleClickAlterPassword()}variant='contained' size="small" sx={{textTransform: "capitalize", width: 100}}>Entrar</Button>
           </Grid>
         </Grid>
         </Box>

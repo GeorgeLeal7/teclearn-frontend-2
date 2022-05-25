@@ -82,6 +82,7 @@ const dashboard = () => {
 			} else {
 				setTotalCount(result.size)
 				setUsers(result.usuarios);
+				console.log(result.usuarios);
 			}
 		});
 	};
@@ -235,7 +236,7 @@ const dashboard = () => {
 												width: theme.spacing(6),
 											}}
 											alt="Paulo Henrique"
-											src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+											src={'http://10.107.144.26:8080/' + row.foto}
 										/>
 									</TableCell>
 									<TableCell size="small" width={theme.spacing(10)}>
