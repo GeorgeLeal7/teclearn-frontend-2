@@ -14,7 +14,7 @@ const login = async datas => {
 
 const sendEmail = async datas => {
 	try {
-		const { data } = await Api.post(`/loginAdm`, datas);
+		const { data } = await Api.post(`/esqueceuSenha`, datas);
 		if (data) return data;
 
 		return new Error('Erro ao criar o registro');
