@@ -7,7 +7,7 @@ import BaseLoginLayout from '../layout/BaseLoginLayout';
 
 
 import { AuthAdmContext } from '../../../shared/contexts/AuthAdmContext';
-import { parseCookies } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
 import { AdminService } from '../services/api/administrador/AdminService';
 
 

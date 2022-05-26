@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
 				console.log(result);
 				
 			} else {
-				window.location.href = '/dashboard/usuario';
+				window.location.href = '/dashboard/usuarios';
 			}
 
 			

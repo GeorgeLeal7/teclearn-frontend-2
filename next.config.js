@@ -5,7 +5,7 @@ const nextConfig = {
 			afterFiles: [
 				{
 					source: '/:path*',
-					destination: `http://localhost:8080/:path*`,
+					destination: `http://10.107.144.26:8080/:path*`,
 				},
 			],
 		};

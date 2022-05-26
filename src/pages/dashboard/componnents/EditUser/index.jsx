@@ -14,6 +14,7 @@ import {
 	Switch,
 	Toolbar,
 } from '@mui/material';
+import { blue, deepOrange, green, pink, yellow } from '@mui/material/colors';
 import { useState } from 'react';
 import { UserService } from '../../services/api/user/UserService';
 import { ReputationBar } from '../ReputationBar';
@@ -24,6 +25,7 @@ const EditUser = ({ setOpenUserCard, listUsers, data }) => {
 	const theme = useTheme();
 
 	const [nome, setNome] = useState(data.tblUsuario.nome);
+	const [foto, setFoto] = useState(data.foto);
 	const [tag, setTag] = useState(data.apelido);
 	const [email, setEmail] = useState(data.tblUsuario.email);
 	const [sobre, setSobre] = useState(data.biografia);
@@ -82,9 +84,14 @@ const EditUser = ({ setOpenUserCard, listUsers, data }) => {
 						marginLeft: 3,
 						marginTop: 5,
 						position: 'absolute',
+						bgcolor:data.idUsuarioComum % 10 == 1 || data.idUsuarioComum % 10 == 3 ? green[500] :
+								data.idUsuarioComum % 10 == 2 || data.idUsuarioComum % 10 == 4 ? pink[500] :
+								data.idUsuarioComum % 10 == 5 || data.idUsuarioComum % 10 == 7 ? deepOrange[500] :
+								data.idUsuarioComum % 10 == 6 || data.idUsuarioComum % 10 == 8 ? yellow[500] :
+								data.idUsuarioComum % 10 == 9 || data.idUsuarioComum % 10 == 0 ? blue[500] : ''
 					}}
-					alt="Paulo Henrique"
-					src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+					alt={nome}
+					src={'http://10.107.144.26:8080/uploads/' + foto}
 				/>
 				<ToolbarSelect
 					label={classificacao}

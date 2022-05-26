@@ -35,6 +35,7 @@ import { UserService } from './services/api/user/UserService';
 import { check } from 'prettier';
 import { EditUser } from './componnents/EditUser';
 import { parseCookies } from 'nookies';
+import { blue, deepOrange, green, pink, yellow } from '@mui/material/colors';
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
 	const theme = useTheme();
@@ -235,9 +236,14 @@ const dashboard = () => {
 											sx={{
 												height: theme.spacing(6),
 												width: theme.spacing(6),
+												bgcolor:row.idUsuarioComum % 10 == 1 || row.idUsuarioComum % 10 == 3 ? green[500] :
+														row.idUsuarioComum % 10 == 2 || row.idUsuarioComum % 10 == 4 ? pink[500] :
+														row.idUsuarioComum % 10 == 5 || row.idUsuarioComum % 10 == 7 ? deepOrange[500] :
+														row.idUsuarioComum % 10 == 6 || row.idUsuarioComum % 10 == 8 ? yellow[500] :
+														row.idUsuarioComum % 10 == 9 || row.idUsuarioComum % 10 == 0 ? blue[500] : ''
 											}}
-											alt="Paulo Henrique"
-											src={'http://localhost:8080/uploads/' + row.foto}
+											alt={row.tblUsuario.nome}
+											src={'http://10.107.144.26:8080/uploads/' + row.foto}
 										/>
 									</TableCell>
 									<TableCell size="small" width={theme.spacing(10)}>

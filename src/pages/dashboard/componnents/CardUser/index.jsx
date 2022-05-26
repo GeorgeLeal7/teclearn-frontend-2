@@ -10,6 +10,7 @@ import {
 	Grid,
 	IconButton,
 } from '@mui/material';
+import { blue, deepOrange, green, pink, yellow } from '@mui/material/colors';
 import { ReputationBar } from '../ReputationBar';
 
 const CardUser = ({ setOpenUserCard, data }) => {
@@ -55,10 +56,15 @@ const CardUser = ({ setOpenUserCard, data }) => {
 						marginLeft: 3,
 						marginTop: 5,
 						position: 'absolute',
+						bgcolor:data.idUsuarioComum % 10 == 1 || data.idUsuarioComum % 10 == 3 ? green[500] :
+								data.idUsuarioComum % 10 == 2 || data.idUsuarioComum % 10 == 4 ? pink[500] :
+								data.idUsuarioComum % 10 == 5 || data.idUsuarioComum % 10 == 7 ? deepOrange[500] :
+								data.idUsuarioComum % 10 == 6 || data.idUsuarioComum % 10 == 8 ? yellow[500] :
+								data.idUsuarioComum % 10 == 9 || data.idUsuarioComum % 10 == 0 ? blue[500] : ''
 					}}
-					alt="Paulo Henrique"
-					src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
-				/>
+					alt={data.tblUsuario.nome}
+					src={'http://10.107.144.26:8080/uploads/' + data.foto} />
+				
 				<Typography
 					alignSelf="self-end"
 					marginRight={4}
