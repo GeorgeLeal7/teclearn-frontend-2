@@ -21,12 +21,15 @@ const AuthProvider = ({ children }) => {
 			}
 			setCookie(null, 'teclearn.token', result.token, {
 				maxAge: 60 * 60 * 1, // 1 hour
+				path: '/'
 			});
 			setCookie(null, 'primeiroAcesso', result.usuario.primeiroAcesso, {
 				maxAge: 60 * 60 * 1, // 1 hour
+				path: '/'
 			});
 			setCookie(null, 'idUsuario', result.usuario.idUsuario, {
 				maxAge: 60 * 60 * 1, // 1 hour
+				path: '/'
 			});
 			console.log(result);
 			if (result.usuario.primeiroAcesso) {

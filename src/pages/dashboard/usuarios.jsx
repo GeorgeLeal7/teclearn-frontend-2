@@ -18,6 +18,7 @@ import {
 	TextField,
 	Pagination,
 } from '@mui/material';
+import nookies from 'nookies'
 import { ReputationBar } from './componnents/ReputationBar';
 import { ColumnTitle } from './componnents/Texts/ColumnTitle';
 import { useEffect, useState } from 'react';
@@ -236,7 +237,7 @@ const dashboard = () => {
 												width: theme.spacing(6),
 											}}
 											alt="Paulo Henrique"
-											src={'http://10.107.144.26:8080/' + row.foto}
+											src={'http://localhost:8080/uploads/' + row.foto}
 										/>
 									</TableCell>
 									<TableCell size="small" width={theme.spacing(10)}>
@@ -549,17 +550,19 @@ const dashboard = () => {
 };
 
 
-export const getServerSideProps = async ({ req }) => {
-	const { ['teclearn.token']: token } = parseCookies({ req });
-
-	if (!token) {
-		return {
-			redirect: {
-				destination: '/dashboard/login',
-				permanent: false,
-			},
-		};
-	}
+export const getServerSideProps = async (ctx) => {
+	const {['teclearn.token']: token} =parseCookies(ctx);	
+	
+	
+		if (!token) {
+			return {
+				redirect: {
+					destination: '/dashboard/login',
+					permanent: false,
+				},
+			};
+		}
+	
 
 	return {
 		props: {},
