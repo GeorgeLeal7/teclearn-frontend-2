@@ -82,6 +82,7 @@ export const MenuDrawer = ({ children }) => {
 							icon='exit_to_app_icon'
 							path='/dashboard/login'
 							label='Sair'
+							logout
 						/>
 					</Box>
 				</Box>

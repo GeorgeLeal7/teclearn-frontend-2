@@ -120,11 +120,20 @@ const CardUser = ({ setOpenUserCard, data }) => {
 					width="100%"
 					height={theme.spacing(40)}
 					sx={{
-						border: 2,
+						border: 1,
 						borderRadius: 1,
-						borderStyle: 'dashed',
+						// borderStyle: 'dashed',
 						borderColor: '#c2c2c2',
-					}}></Box>
+						padding: 1
+					}}>
+					<Typography
+					fontSize={15}
+					fontFamily="roboto"
+					fontWeight={400}
+					color="primary.fontMain">
+					{data.biografia}
+					</Typography>
+					</Box>
 				<Grid container width="100%" height="30%" marginTop={1}>
 					<Grid
 						item

@@ -35,11 +35,7 @@ const dashboard = () => {
 
 	useEffect(() => {
 		findAllCursos();
-		console.log(cursos);
-	}, []);
-	useEffect(() => {
-		console.log(cursos)
-	}, [cursos]);
+	}, [page]);
 
 	useEffect(() => {
 		handleSetDrawerOptions([
@@ -73,8 +69,21 @@ const dashboard = () => {
 	
 	return (
 		<MenuDrawer>
-			<BaseCleanLayout pagination totalCount={totalCount} page={1} setPage={setPage} limit={cursos.length} >
+			<BaseCleanLayout pagination totalCount={totalCount} page={page} setPage={setPage} limit={cursos.length} >
 				<Grid container width="100%" height="100%">
+				<Grid
+						item
+						xs={3}
+						padding={1}
+						height={
+							lgDown
+								? theme.spacing(30)
+								: exUp
+								? theme.spacing(43)
+								: theme.spacing(35)
+						}>
+						<CardAdd findCursos={findAllCursos}/>
+					</Grid>
 					{
 						cursos.length > 0 && cursos.map(curso => (	
 							<Grid
@@ -116,19 +125,7 @@ const dashboard = () => {
 					// )
 					
 					// ) */}
-					<Grid
-						item
-						xs={3}
-						padding={1}
-						height={
-							lgDown
-								? theme.spacing(30)
-								: exUp
-								? theme.spacing(43)
-								: theme.spacing(35)
-						}>
-						<CardAdd findCursos={findAllCursos}/>
-					</Grid>
+					
 				</Grid>
 			</BaseCleanLayout>
 		</MenuDrawer>

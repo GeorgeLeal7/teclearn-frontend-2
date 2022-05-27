@@ -13,6 +13,8 @@ const BaseCleanLayout = ({ title, subtitle, onClick, pagination, children, page,
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
+	
+
 	return (
 		<Box
 			flexGrow={1}
@@ -79,7 +81,7 @@ const BaseCleanLayout = ({ title, subtitle, onClick, pagination, children, page,
 					sx={{marginTop: 3}}
 					page={page}
 					count={Math.ceil(totalCount / 7)}
-					onChange={(e, newPage) => { setPage(newPage);  console.log(page)}}
+					onChange={(e, newPage) => { setPage(newPage)}}
 			/>)}
 			</Container>
 		</Box>

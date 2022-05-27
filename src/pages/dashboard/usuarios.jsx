@@ -61,7 +61,7 @@ const dashboard = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [categoria, setCategoria] = useState('');
-	const [moderador, setModerador] = useState('');
+	const [moderador, setModerador] = useState(false);
 	const [checked, setChecked] = useState('');
 
 	const [totalCount, setTotalCount] = useState(0);
@@ -90,7 +90,8 @@ const dashboard = () => {
 	};
 	useEffect(() => {
 		listUsers();
-	}, [filterTipo, filterModerador, filterStatus, order, busca, page]);
+	}, [filterTipo, filterModerador, filterStatus, order, busca, page, user]);
+	
 
 	const handleClickCreate = () => {
 		UserService.create({
@@ -101,6 +102,7 @@ const dashboard = () => {
 			pontuacao: 0,
 			reputacao: 100,
 			status: true,
+			foto: '',
 			senha: 'SENHA!@#',
 		}).then(() => {
 			setOpen(false);
@@ -127,7 +129,6 @@ const dashboard = () => {
 				return;
 			} else {
 				setUser(result);
-				console.log(result);
 				setOpenEditUser(true);
 			}
 		});
@@ -245,6 +246,7 @@ const dashboard = () => {
 											alt={row.tblUsuario.nome}
 											src={'http://10.107.144.26:8080/uploads/' + row.foto}
 										/>
+										
 									</TableCell>
 									<TableCell size="small" width={theme.spacing(10)}>
 										<Text>{row.tblUsuario.nome}</Text>
@@ -427,6 +429,7 @@ const dashboard = () => {
 						listUsers={listUsers}
 						setOpenUserCard={setOpenEditUser}
 						data={user}
+						handleClickEdit={handleClickEdit}
 					/>
 				</Modal>
 

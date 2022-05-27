@@ -84,12 +84,27 @@ const update = async (datas, id) => {
 	}
 };
 
+const removeImage = async (id) => {
+	try {
+		const { data } = await Api.put(
+			`/usuario/removeImage/${id}`,
+		);
+		if (data) return data.id;
+
+		return new Error('Erro ao atualizar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao atualizar o registro');
+	}
+};
+
 const UserService = {
 	getAll,
 	getById,
 	deleteById,
 	create,
 	update,
+	removeImage
 };
 
 export { UserService };

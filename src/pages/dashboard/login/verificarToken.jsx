@@ -18,7 +18,7 @@ const dashboard = () => {
   const handleClickVerifyToken = () => {
     if (newPasswordToken == token) {
       router.push('/dashboard/login/redefinicaoSenha');
-      destroyCookie(null, 'newPasswordToken');
+      destroyCookie(null, 'newPasswordToken', {path: '/'});
     } else {
       console.log('token invalido');
     }

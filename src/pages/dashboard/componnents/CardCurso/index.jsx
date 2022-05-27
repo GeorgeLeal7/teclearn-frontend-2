@@ -33,7 +33,7 @@ const CardCurso = ({id, nome, foto}) => {
 					}}
 					width="100%"
 					height="70%"
-					src={foto}></Box>
+					src={'http://10.107.144.26:8080/uploads/' + foto}></Box>
 
 				<Box width="100%" height="30%" padding={1}>
 					<Typography

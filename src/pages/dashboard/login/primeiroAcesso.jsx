@@ -39,7 +39,7 @@ const dashboard = () => {
           return;
         } 
       });
-      destroyCookie(null, 'primeiroAcesso');
+      destroyCookie(null, 'primeiroAcesso', {path: '/'});
       window.location.href = '/dashboard/geral';
     }
 

@@ -8,8 +8,9 @@ import {
 	useTheme,
 	useMediaQuery,
 } from '@mui/material';
+import { destroyCookie } from 'nookies';
 
-const ListItemLink = ({ path, icon, label, onClick, color, rotate }) => {
+const ListItemLink = ({ path, icon, label, onClick, color, rotate, logout}) => {
 	const theme = useTheme();
 	const router = useRouter();
 	const mdDown = useMediaQuery(theme.breakpoints.down('md'));
@@ -17,6 +18,12 @@ const ListItemLink = ({ path, icon, label, onClick, color, rotate }) => {
 	const { isDrawerOpen } = useDrawerContext();
 	const selected = router.pathname == path ? true : false;
 	const handleClick = () => {
+		if (logout) {
+			console.log("dasda");
+			destroyCookie(null, 'idUsuario',{path: '/'});
+			destroyCookie(null, 'primeiroAcesso',{path: '/'});
+			destroyCookie(null, 'teclearn.token',{path: '/'});
+		}
 		router.push(path);
 		onClick?.();
 	};

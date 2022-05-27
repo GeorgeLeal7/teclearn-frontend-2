@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material';
+import { Close, Delete } from '@mui/icons-material';
 import {
 	Typography,
 	Icon,
@@ -21,9 +21,10 @@ import { ReputationBar } from '../ReputationBar';
 import { ModalTitle } from '../Texts/ModalTitle';
 import { ToolbarSelect } from '../ToolbarSelect';
 
-const EditUser = ({ setOpenUserCard, listUsers, data }) => {
+const EditUser = ({ setOpenUserCard, listUsers, data, handleClickEdit }) => {
 	const theme = useTheme();
 
+	const [idUsuarioComum, setIdUsuarioComum] = useState(data.idUsuarioComum);
 	const [nome, setNome] = useState(data.tblUsuario.nome);
 	const [foto, setFoto] = useState(data.foto);
 	const [tag, setTag] = useState(data.apelido);
@@ -32,7 +33,16 @@ const EditUser = ({ setOpenUserCard, listUsers, data }) => {
 	const [moderador, setModerador] = useState(data.moderador);
 	const [classificacao, setClassificacao] = useState(data.tblUsuario.classificacao);
 
-	console.log(data);
+	// setIdUsuarioComum(data.idUsuarioComum);
+	// setNome(data.tblUsuario.nome);
+	// setFoto(data.foto);
+	// setTag(data.apelido);
+	// setEmail(data.tblUsuario.email);
+	// setSobre(data.biografia);
+	// setModerador(data.moderador);
+	// setClassificacao(data.tblUsuario.classificacao);
+
+
 	const updateUser = () => {
 		const result = UserService.update(
 			{
@@ -54,6 +64,18 @@ const EditUser = ({ setOpenUserCard, listUsers, data }) => {
 			}
 		});
 	};
+
+	const removeUserImage = () => {
+		UserService.removeImage(idUsuarioComum).then((result) => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				console.log(data.tblUsuario.idUsuario);
+				handleClickEdit(data.idUsuarioComum);
+			}
+		});
+	}
 
 	return (
 		<Box
@@ -93,6 +115,34 @@ const EditUser = ({ setOpenUserCard, listUsers, data }) => {
 					alt={nome}
 					src={'http://10.107.144.26:8080/uploads/' + foto}
 				/>
+				{foto && (
+					<Box
+					width={theme.spacing(19)}
+					height={theme.spacing(19)}
+					backgroundColor="#b0b0b06d"
+					position="absolute"
+					borderRadius={50}
+					sx={{
+						marginLeft: 3.5, marginTop: 5.4, cursor: "pointer", opacity: 0, '&:hover': {
+							opacity: 1
+						}}
+					}
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					onClick={()=> {removeUserImage()}}
+			
+				>
+					<Icon sx={{ '&.material-icons':{
+						fontSize: 70,
+						color: "#2b2b2b"
+					}
+					}}>
+						delete
+					</Icon>
+				</Box>
+				)}
+				
 				<ToolbarSelect
 					label={classificacao}
 					setLabel={setClassificacao}

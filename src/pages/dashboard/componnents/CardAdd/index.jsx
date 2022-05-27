@@ -80,14 +80,15 @@ const CardAdd = ({findCursos}) => {
 		<>
 			<Box
 				onClick={handleOpen}
-				sx={{ cursor: 'pointer' }}
+				sx={{ cursor: 'pointer', border: '1px solid #c7c7c7'}}
 				width="100%"
 				height="100%"
 				display="flex"
 				backgroundColor="#e6e6e6"
 				borderRadius={1}
 				justifyContent="center"
-				alignItems="center">
+				alignItems="center"
+			>
 				<Add
 					onClick={findAllMaterias}
 					sx={{
