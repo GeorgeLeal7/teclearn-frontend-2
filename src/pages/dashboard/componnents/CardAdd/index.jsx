@@ -16,6 +16,7 @@ import { ModalTitle } from '../Texts/ModalTitle';
 import { Close } from '@mui/icons-material';
 import { MateriaService } from '../../services/api/materia/MateriaService';
 import { CursoService } from '../../services/api/curso/CursoService';
+import {InputImage} from '../InputImage';
 
 const CardAdd = ({findCursos}) => {
 	const theme = useTheme();
@@ -118,7 +119,8 @@ const CardAdd = ({findCursos}) => {
 						<Grid
 							item
 							xs={12}
-							height="8%"
+							height="4%"
+							// backgroundColor="#f0f"
 							display="flex"
 							alignItems="flex-start"
 							justifyContent="space-between"
@@ -133,10 +135,11 @@ const CardAdd = ({findCursos}) => {
 						<Grid
 							item
 							xs={12}
-							height="80%"
-							padding={3}
+							paddingLeft={3}
+							paddingRight={3}
+							// backgroundColor="#f0f"
 							display="flex"
-							flexDirection="column"
+							alignItems="flex-end"
 							gap={2}>
 							<TextField
 								value={cursoNome}
@@ -146,6 +149,17 @@ const CardAdd = ({findCursos}) => {
 								label="Nome"
 								size="large"
 							/>
+							<InputImage />
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							paddingLeft={3}
+							paddingRight={3}
+							paddingTop={2}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
 							<Box
 								width="100%"
 								height={30}
@@ -174,7 +188,7 @@ const CardAdd = ({findCursos}) => {
 							</Box>
 
 							<Box
-								maxHeight="40%"
+								height={110}
 								width="100%"
 								display="flex"
 								gap={1}
@@ -196,31 +210,6 @@ const CardAdd = ({findCursos}) => {
 									
 									label={row.materiaNome}
 										onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
-								/>
-								))}
-							</Box>
-							<Box
-								maxHeight="50%"
-								width="100%"
-								display="flex"
-								gap={1}
-								flexWrap="wrap"
-								overflow="scroll">
-								{idMaterias && idMaterias.map((row,i) => (
-									<Chip
-										key={i}
-										color="primary"
-										// sx={idMaterias.map((id) => { 
-										// 	if (row.idMateria == id) {
-										// 		return {backgroundColor: "#ff88ff"}
-										// 	}
-											
-											
-										// })
-										// }
-									
-									label={row.materiaNome}
-									onClick={()=>handleClickChip(row.idMateria)}
 								/>
 								))}
 							</Box>
