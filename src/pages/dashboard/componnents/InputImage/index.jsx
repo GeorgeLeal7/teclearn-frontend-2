@@ -2,8 +2,8 @@ import styles from './InputImage.module.css'
 import {plus} from '../Icons'
 import { useState } from 'react';
 
-const InputImage = () =>{
-    const [img, setImg] = useState(plus);
+const InputImage = ({img, setImg}) =>{
+   
 
     return(
         <div>

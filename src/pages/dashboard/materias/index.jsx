@@ -5,11 +5,13 @@ import { useDrawerContext } from '../../../shared/contexts';
 import BaseLayout from '../layout/BaseLayout';
 import { CursoService } from '../services/api/curso/CursoService';
 import { useRouter } from 'next/router';
-import { AddCircleOutline, Close } from '@mui/icons-material';
+import { AddCircleOutline, Close, Delete, Edit } from '@mui/icons-material';
 import { ModalTitle } from '../componnents/Texts/ModalTitle';
 import { MateriaService } from '../services/api/materia/MateriaService';
 import { CategoriaService } from '../services/api/categoria/CategoriaService';
 import { parseCookies } from 'nookies';
+import { Text } from '../componnents/Texts/Text';
+
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -23,6 +25,10 @@ const dashboard = () => {
 	const [materia, setMateria] = useState();
 	const [materiasSelectable, setMateriasSelectable] = useState();	
 	const [busca, setBusca] = useState();
+	const [openDeleteConfirm, setOpeDeleteConfirm] = useState(false);
+	const [materiaId, setMateriaId] = useState();
+
+	const [statusCreate, setStatusCreate] = useState();
 
 	const [categorias, setCategorias] = useState();
 	const [categoriaByMateria, setCategoriaByMateria] = useState();
@@ -39,8 +45,8 @@ const dashboard = () => {
 	const handleExcludeCategoria = () =>{
 
 	};
-
-	useEffect(()=>{
+	const findAllMaterias = ()=>{
+		console.log("buscando todas")
 		MateriaService.getAll().then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
@@ -50,7 +56,11 @@ const dashboard = () => {
 				console.log(result);
 			}
 		});
-	}, [id]);
+	};
+	useEffect(()=>{
+		findAllMaterias();
+		console.log("ue")
+	}, [id, statusCreate]);
 
 	const findAllCategorias = () => {
 		CategoriaService.getAll().then(result => {
@@ -62,6 +72,13 @@ const dashboard = () => {
 				console.log(result);
 			}
 		});
+	}
+
+	const handleClickDelete = () => {
+		MateriaService.deleteById(materiaId).then(()=>{
+			findAllMaterias();
+			setOpeDeleteConfirm(false);
+		})
 	}
 	const handleClickChip = (id) => {
 		var add = true
@@ -78,12 +95,16 @@ const dashboard = () => {
 	};
 
 
-	const createMateria = () => {
+	const createMateria = async () => {
 		MateriaService.create({
 			materiaNome
 		}).then((result) => {
+			setStatusCreate("dasdassa");
+			console.log("criado")
 			setMateriaNome('');
 		});
+
+		
 	}
 
 	const getCategoriaByMateria = () => {
@@ -176,12 +197,13 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={325}
+							height={350}
 							display="flex"
 							flexDirection="column"
 							alignItems="flex-start"
 							justifyContent="space-between"
 							sx={{paddingBottom: 10}}
+							overflow= "auto"
 							>
 							
 							
@@ -190,12 +212,16 @@ const dashboard = () => {
 									<Box 
 										width="100%" 
 										height={theme.spacing(6.5)} 
-										padding={2}
+										padding={1}
+										paddingLeft={2}
 										backgroundColor={materia == row.idMateria?'#F4F4F4':''}
 										onClick={()=>{setMateria(row.idMateria); getCategoriaByMateria()}} 
 										sx={{cursor: 'pointer'}}
+										display="flex"
+										justifyContent="space-between"
 										>
 										<Typography
+											marginTop={1}
 											fontSize={xlDown ? (lgDown ? 13 : 17) : 21}
 											fontWeight="400"
 											fontFamily="poppins"
@@ -204,6 +230,28 @@ const dashboard = () => {
 											>
 											{row.materiaNome}
 										</Typography>
+										<Box>
+										<IconButton
+												// onClick={() => {
+												// 	handleClickEdit(
+												// 		row.idUsuarioComum
+												// 	);
+												// }}
+												children={<Edit />}
+												sx={{ color: '#8BDF94' }}
+											/>
+										<IconButton
+												onClick={() => {
+													setOpeDeleteConfirm(true);
+													setMateriaId(
+														row.idMateria
+													);
+												}}
+												children={<Delete />}
+												sx={{ color: '#FF6969' }}
+											/>
+										</Box>
+										
 									</Box>
 									))
 									}
@@ -443,6 +491,69 @@ const dashboard = () => {
 								</Button>
 					</Box>
 				</Box>
+				<Modal
+					open={openDeleteConfirm}
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
+					backgroundColor="primary.modal"
+					component={Box}>
+					<Box
+						width={theme.spacing(60)}
+						height={theme.spacing(25)}
+						backgroundColor="primary.contrastText"
+						marginTop={-5}
+						borderRadius={1}
+						elevation={2}
+						padding={2}
+						component={Paper}>
+						<Grid container width="100%" height="100%">
+							<Grid
+								item
+								xs={12}
+								height="22%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="space-between"
+								padding={0.5}>
+								<ModalTitle>Excluir Matéria</ModalTitle>
+								<IconButton
+									onClick={() => setOpeDeleteConfirm(false)}
+									children={<Close />}
+									sx={{ color: '#FF6969' }}
+								/>
+							</Grid>
+							<Grid
+								item
+								xs={12}
+								height="50%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="space-between"
+								padding={0.5}>
+								<Text>
+									A matéria será apagado permanentemente da
+									plataforma. Tem certeza de que deseja
+									exclui-la?
+								</Text>
+							</Grid>
+							<Grid
+								item
+								xs={12}
+								height="25%"
+								display="flex"
+								alignItems="flex-start"
+								justifyContent="flex-end"
+								padding={1}>
+								<Button
+									variant="contained"
+									onClick={handleClickDelete}>
+									Excluir
+								</Button>
+							</Grid>
+						</Grid>
+					</Box>
+				</Modal>
 			</BaseLayout>
 		</MenuDrawer>
 	);

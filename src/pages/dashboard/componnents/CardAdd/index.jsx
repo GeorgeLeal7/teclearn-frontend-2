@@ -17,6 +17,7 @@ import { Close } from '@mui/icons-material';
 import { MateriaService } from '../../services/api/materia/MateriaService';
 import { CursoService } from '../../services/api/curso/CursoService';
 import {InputImage} from '../InputImage';
+import {plus} from '../Icons'
 
 const CardAdd = ({findCursos}) => {
 	const theme = useTheme();
@@ -31,6 +32,8 @@ const CardAdd = ({findCursos}) => {
 
 	const [cursoNome, setCursoNome] = useState('');
 	const [busca, setBusca] = useState('');
+
+	const [img, setImg] = useState(plus);
 
 	
 	useEffect(() => {
@@ -54,7 +57,7 @@ const CardAdd = ({findCursos}) => {
 		console.log(idMaterias);
 		CursoService.create({
 			cursoNome,
-			cursoImagem: "imagem",
+			cursoImagem: img,
 			materias: idMaterias.id
 		}).then((result) => {
 			setIdMaterias([]);
@@ -149,7 +152,7 @@ const CardAdd = ({findCursos}) => {
 								label="Nome"
 								size="large"
 							/>
-							<InputImage />
+							<InputImage img={img} setImg={setImg} />
 						</Grid>
 						<Grid
 							item
@@ -228,7 +231,7 @@ const CardAdd = ({findCursos}) => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								onClick={()=> createCurso}
+								onClick={()=> createCurso()}
 							>
 								Adicionar
 							</Button>

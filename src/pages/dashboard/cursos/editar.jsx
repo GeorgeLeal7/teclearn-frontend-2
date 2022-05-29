@@ -207,6 +207,7 @@ const dashboard = () => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							sx={{paddingBottom: 10}}
+							overflow="auto"
 							>
 							
 							
