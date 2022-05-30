@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { theme } from '../../../shared/themes';
 
-const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, setPage, limit, totalCount}) => {
+const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, setPage, limit, totalCount, removeButton}) => {
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -66,7 +66,9 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 						display="flex"
 						justifyContent="flex-end"
 						alignItems="flex-end">
-						<Button
+						{!removeButton &&
+							(
+								<Button
 							sx={{
 								textTransform: 'capitalize',
 								borderRadius: 5,
@@ -82,6 +84,8 @@ const BaseLayout = ({ title, subtitle, onClick, children, sx, pagination, page, 
 							alignSelf="flex-end">
 							Novo {title}
 						</Button>
+							)
+						}
 					</Box>
 				</Box>
 				<Box

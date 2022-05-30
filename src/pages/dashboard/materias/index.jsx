@@ -49,8 +49,6 @@ const dashboard = () => {
 				getCategoriaByMateria(materia);
 			}, 200);
 		 })
-			
-		
 	};
 
 	const handleClickEdit = (idDaMateria) =>{
@@ -176,7 +174,7 @@ const dashboard = () => {
 		
 	}
 
-	const getCategoriaByMateria = (idDaMateria) => {
+	const  getCategoriaByMateria = (idDaMateria) => {
 		CategoriaService.getCategoriaByIdMateria(idDaMateria).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
@@ -218,7 +216,7 @@ const dashboard = () => {
 	}, []);
 	return (
 		<MenuDrawer>
-			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Materia">
+			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Materia" removeButton>
 				<Box width="50%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
 					<Grid container width="100%">
 						
@@ -500,9 +498,10 @@ const dashboard = () => {
 												onClick={() => handleClickChip({ id: row.idCategoria})}
 												sx={selectCategoria.map((categoria)=>{
 													if(categoria.id == row.idCategoria){
-														return {backgroundColor: "#f0f",
+														return {backgroundColor: "#3D97F0",
+														color: "#fff",
 														'&.MuiChip-root:hover': {
-															backgroundColor: "#f0f",
+															backgroundColor: "#3D97F0",
 														}
 													}
 													} 
@@ -675,9 +674,10 @@ const dashboard = () => {
 												sx={selectCategoria.map((categoria)=>{
 													if(categoria.id == row.idCategoria){
 														console.log(categoria.id, row.idCategoria);
-														return {backgroundColor: "#f0f",
+														return {backgroundColor: "#3D97F0",
+														color: "#fff",
 														'&.MuiChip-root:hover': {
-															backgroundColor: "#f0f",
+															backgroundColor: "#3D97F0",
 														}
 													}
 													} 
@@ -718,13 +718,6 @@ const dashboard = () => {
 								onClick={()=>updateMateria()}
 							>
 								Atualizar
-							</Button>
-							<Button
-								sx={{ textTransform: 'capitalize' }}
-								variant="contained"
-								onClick={()=>console.log(selectCategoria)}
-							>
-								log categorias
 							</Button>
 						</Grid>
 					</Grid>
