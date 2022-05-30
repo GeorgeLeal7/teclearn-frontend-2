@@ -5,13 +5,6 @@ const getAll = async (
 ) => {
 	try {
 		const { data } = await Api.get(`/usuario/listarUsuario/`);
-		// console.log(
-		// 	`/usuario/listarUsuarioComum?${
-		// 		filterTipo && 'classificacao=' + filterTipo + '&'
-		// 	}${filterStatus && 'status=' + filterStatus + '&'}${
-		// 		filterModerador && 'moderador=' + filterModerador + '&	'
-		// 	}${order && 'ordenar=' + order + '&'}`
-		// );
 		if (data) return data;
 
 		return new Error('Erro ao listar os registros');

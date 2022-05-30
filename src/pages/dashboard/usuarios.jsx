@@ -244,7 +244,7 @@ const dashboard = () => {
 														row.idUsuarioComum % 10 == 9 || row.idUsuarioComum % 10 == 0 ? blue[500] : ''
 											}}
 											alt={row.tblUsuario.nome}
-											src={'http://10.107.144.26:8080/uploads/' + row.foto}
+											src={'http://10.107.144.28:8080/uploads/' + row.foto}
 										/>
 										
 									</TableCell>

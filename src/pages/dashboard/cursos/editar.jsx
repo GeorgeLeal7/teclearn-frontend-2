@@ -391,12 +391,12 @@ const dashboard = () => {
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 									{
-										// materiasSelectable && materiasSelectable[0].map((row, i) => (
-										// 	<Chip 
-										// 		key={i} 
-										// 		label={row.materiaNome} 
-										// 		onClick={() => handleClickChip({ id: row.idMateria})}/>
-										// ))
+										materiasSelectable && materiasSelectable[0].map((row, i) => (
+											<Chip 
+												key={i} 
+												label={row.materiaNome} 
+												onClick={() => handleClickChip({ id: row.idMateria})}/>
+										))
 
 									
 									}

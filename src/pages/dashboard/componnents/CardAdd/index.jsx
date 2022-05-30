@@ -7,6 +7,7 @@ import {
 	Button,
 	Icon,
 	InputBase,
+	Chip
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Box, useTheme } from '@mui/material';
@@ -17,7 +18,6 @@ import { MateriaService } from '../../services/api/materia/MateriaService';
 import { CursoService } from '../../services/api/curso/CursoService';
 import {InputImage} from '../InputImage';
 import {plus} from '../Icons'
-import {Chip} from '../Buttons'
 
 const CardAdd = ({findCursos}) => {
 	const theme = useTheme();
@@ -54,12 +54,18 @@ const CardAdd = ({findCursos}) => {
 	};
 
 	const createCurso = () => {
-		console.log(idMaterias);
-		CursoService.create({
-			cursoNome,
-			cursoImagem: img,
-			materias: idMaterias.id
-		}).then((result) => {
+		const formData = new FormData();
+
+		const array = [];
+		idMaterias.map((row, i) => {
+			array[i] = row.id;
+		})
+
+		formData.append('cursoNome', cursoNome);
+		formData.append('files', img);
+		formData.append('materias', array);
+
+		CursoService.create(formData).then((result) => {
 			setIdMaterias([]);
 			setCursoNome('');
 			findCursos();
@@ -71,13 +77,17 @@ const CardAdd = ({findCursos}) => {
 		console.log(id.id);
 		idMaterias.length != 0  && idMaterias.map((idMateria, key) => {
 			if (idMateria.id == id.id) {
-				idMaterias.splice(key, 1);
+				const a = idMaterias;
+				a.splice(key, 1)
 				add = false;
+				setIdMaterias([]);
+				setTimeout(()=>{
+					setIdMaterias(a);
+				}, 100);
 			}
 		})
 		if (add) setIdMaterias([...idMaterias, id]);
 		console.log(idMaterias)
-	
 	};
 
 	return (
@@ -200,20 +210,24 @@ const CardAdd = ({findCursos}) => {
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 								{materias && materias.map((row,i) => (
-									<Chip
-										key={i}
-										
-										// sx={idMaterias.map((id) => { 
-										// 	if (row.idMateria == id) {
-										// 		return {backgroundColor: "#ff88ff"}
-										// 	}
-											
-											
-										// })
-										// }
-									label={row.materiaNome}
+									<Chip 
+										key={i} 
+										label={row.materia} 
 										onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
-								/>
+										
+										sx={idMaterias.map((id) => { 
+											if (row.idMateria == id) {
+												return {
+													backgroundColor: "#3D97F0",
+													color: "#fff",
+													'&.MuiChip-root:hover': {
+														backgroundColor: "#3D97F0",
+													}
+												}
+											}	
+										})
+										}		
+									/>
 								))}
 							</Box>
 						</Grid>

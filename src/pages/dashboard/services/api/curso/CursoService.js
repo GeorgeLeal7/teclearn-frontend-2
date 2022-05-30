@@ -40,7 +40,7 @@ const create = async datas => {
 	console.log(datas);
 	console.log("dsdasdas");
 	try {
-		const { data } = await Api.post(`/curso/inserirCurso`,{ datas}, {
+		const { data } = await Api.post(`/curso/inserirCurso`,datas, {
 			headers: {
 			"Content-Type": `multipart/form-data;`,
 			}
