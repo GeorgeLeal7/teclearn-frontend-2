@@ -5,7 +5,6 @@ import {
 	IconButton,
 	TextField,
 	Button,
-	Chip,
 	Icon,
 	InputBase,
 } from '@mui/material';
@@ -18,6 +17,7 @@ import { MateriaService } from '../../services/api/materia/MateriaService';
 import { CursoService } from '../../services/api/curso/CursoService';
 import {InputImage} from '../InputImage';
 import {plus} from '../Icons'
+import {Chip} from '../Buttons'
 
 const CardAdd = ({findCursos}) => {
 	const theme = useTheme();
@@ -191,7 +191,8 @@ const CardAdd = ({findCursos}) => {
 							</Box>
 
 							<Box
-								height={110}
+								minHeight={80}
+								maxHeight={110}
 								width="100%"
 								display="flex"
 								gap={1}
@@ -210,7 +211,6 @@ const CardAdd = ({findCursos}) => {
 											
 										// })
 										// }
-									
 									label={row.materiaNome}
 										onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
 								/>

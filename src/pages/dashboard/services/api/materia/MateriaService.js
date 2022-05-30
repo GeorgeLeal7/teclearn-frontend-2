@@ -13,6 +13,19 @@ const getAll = async (busca) => {
 	};
 };
 
+const getById = async id => {
+	try {
+		const { data } = await Api.get(`/materia/listarMateria/${id}`);
+		// console.log(data);
+		if (data) return data;
+
+		return new Error('Erro ao listar os registros');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao listar os registros');
+	}
+};
+
 const getDifMateria = async (materias) => {
 	try {
 		const { data } = await Api.post(`/curso/listarCursoMateriaRelacionado`, { materias: materias });
@@ -39,7 +52,7 @@ const create = async datas => {
 	try {
 		const { data } = await Api.post(`/materia/inserirMateria`, datas);
 		console.log(data);
-		if (data) return data.id;
+		if (data) return data;
 
 		return new Error('Erro ao criar o registro');
 	} catch (error) {
@@ -48,28 +61,43 @@ const create = async datas => {
 	}
 };
 
-// const update = async (datas, id) => {
-// 	try {
-// 		const { data } = await Api.put(
-// 			`/usuario/alterarUsuarioComum/${id}`,
-// 			datas
-// 		);
-// 		if (data) return data.id;
+const createMateriaCategoria = async datas => {
+	try {
+		const { data } = await Api.post(`/materiacategoria/inserirMateriaCategoria`, datas);
+		console.log(data);
+		if (data) return data;
 
-// 		return new Error('Erro ao atualizar o registro');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao atualizar o registro');
-// 	}
-// };
+		return new Error('Erro ao criar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao criar o registro');
+	}
+};
+
+const update = async (datas, id) => {
+	try {
+		console.log(id);
+		const { data } = await Api.put(
+			`/materiacategoria/alterarMateriaCategoria/${id}`,
+			datas
+		);
+		if (data) return data.id;
+
+		return new Error('Erro ao atualizar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao atualizar o registro');
+	}
+};
 
 const MateriaService = {
 	getAll,
 	getDifMateria,
-	// getById,
+	getById,
 	deleteById,
 	create,
-	// update,
+	createMateriaCategoria,
+	update,
 };
 
 export { MateriaService };

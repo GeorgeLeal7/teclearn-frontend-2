@@ -37,29 +37,61 @@ const dashboard = () => {
 	const [materiaNome, setMateriaNome] = useState();
 
 	const [open, setOpen] = useState(false);
+	const [openUpdate, setOpenUpdate] = useState(false);
 
 	const id = useMemo(()=>{
 		return router.query.id
 	}, [router.query]);
 
-	const handleExcludeCategoria = () =>{
-
+	const handleRemoveCategoria = (idCategoria) =>{
+		 CategoriaService.remove(materia, idCategoria).then(()=>{
+			setTimeout(()=>{
+				getCategoriaByMateria(materia);
+			}, 200);
+		 })
+			
+		
 	};
+
+	const handleClickEdit = (idDaMateria) =>{
+		setOpenUpdate(true);
+		findAllCategorias();
+		setSelectCategoria([]);
+		setMateria(idDaMateria);
+		MateriaService.getById(idDaMateria).then((result)=>{
+			setMateriaNome(result.materiaNome);
+
+		CategoriaService.getCategoriaByIdMateria(idDaMateria).then(result => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				console.log(result);
+				result.tblMateriasCategorias.map((row)=>{
+					setSelectCategoria([...selectCategoria, {id: row.tblCategoriaIdCategoria}]);
+				});
+			
+			}
+		});
+	});
+	}
+	const handleClickMateria = (idMateria) => {
+		setMateria(idMateria)
+		
+		getCategoriaByMateria(idMateria);
+	}
 	const findAllMaterias = ()=>{
-		console.log("buscando todas")
 		MateriaService.getAll().then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
 			} else {
 				setMaterias(result);
-				console.log(result);
 			}
 		});
 	};
 	useEffect(()=>{
 		findAllMaterias();
-		console.log("ue")
 	}, [id, statusCreate]);
 
 	const findAllCategorias = () => {
@@ -69,7 +101,7 @@ const dashboard = () => {
 				return;
 			} else {
 				setCategorias(result);
-				console.log(result);
+
 			}
 		});
 	}
@@ -82,39 +114,67 @@ const dashboard = () => {
 	}
 	const handleClickChip = (id) => {
 		var add = true
-		console.log(id.id);
 		selectCategoria.length != 0  && selectCategoria.map((idCategoria, key) => {
 			if (idCategoria.id == id.id) {
-				selectNewMateria.splice(key, 1);
+				const a = selectCategoria;
+				a.splice(key, 1)
 				add = false;
+				setSelectCategoria([]);
+				setTimeout(()=>{
+					setSelectCategoria(a);
+				}, 100);
+				
 			}
 		})
 		if (add) setSelectCategoria([...selectCategoria, id]);
-		console.log(selectCategoria)
+
+	
 	
 	};
 
 
-	const createMateria = async () => {
+	const createMateria =  () => {
 		MateriaService.create({
 			materiaNome
 		}).then((result) => {
-			setStatusCreate("dasdassa");
-			console.log("criado")
+			selectCategoria.map((row)=>{
+				
+				MateriaService.createMateriaCategoria({
+					tblMateriaIdMateria: result,
+					tblCategoriaIdCategoria: row.id
+				})
+			})
+			setStatusCreate(result);
 			setMateriaNome('');
+			setSelectCategoria([]);
 		});
 
 		
 	}
 
-	const getCategoriaByMateria = () => {
-		CategoriaService.getAll(materia).then(result => {
+
+	const updateMateria =  () => {
+	
+		MateriaService.update({
+			materiaNome,
+			categorias: selectCategoria
+		}
+		, materia).then((result) => {
+			setStatusCreate(result);
+			setMateriaNome('');
+			setSelectCategoria([]);
+		});
+
+		
+	}
+
+	const getCategoriaByMateria = (idDaMateria) => {
+		CategoriaService.getCategoriaByIdMateria(idDaMateria).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
 			} else {
-				setCategoriaByMateria(result);
-				console.log(result);
+				setCategoriaByMateria(result.tblMateriasCategorias);
 			}
 		});
 	};
@@ -215,7 +275,7 @@ const dashboard = () => {
 										padding={1}
 										paddingLeft={2}
 										backgroundColor={materia == row.idMateria?'#F4F4F4':''}
-										onClick={()=>{setMateria(row.idMateria); getCategoriaByMateria()}} 
+										onClick={()=>{handleClickMateria(row.idMateria)}} 
 										sx={{cursor: 'pointer'}}
 										display="flex"
 										justifyContent="space-between"
@@ -232,11 +292,11 @@ const dashboard = () => {
 										</Typography>
 										<Box>
 										<IconButton
-												// onClick={() => {
-												// 	handleClickEdit(
-												// 		row.idUsuarioComum
-												// 	);
-												// }}
+												onClick={() => {
+													handleClickEdit(
+														row.idMateria
+													);
+												}}
 												children={<Edit />}
 												sx={{ color: '#8BDF94' }}
 											/>
@@ -325,8 +385,8 @@ const dashboard = () => {
 										key={row.idCategoria}
 										size="small"
 										color="primary"
-										label={row.categoriaNome}	
-										onDelete={handleExcludeCategoria}
+										label={row.tblCategoria.categoriaNome}	
+										onDelete={()=>handleRemoveCategoria(row.tblCategoriaIdCategoria)}
 									/>
 									))
 								}
@@ -429,7 +489,18 @@ const dashboard = () => {
 											<Chip 
 												key={i} 
 												label={row.categoriaNome} 
-												onClick={() => handleClickChip({ id: row.idCategoria})}/>
+												onClick={() => handleClickChip({ id: row.idCategoria})}
+												sx={selectCategoria.map((categoria)=>{
+													if(categoria.id == row.idCategoria){
+														return {backgroundColor: "#f0f",
+														'&.MuiChip-root:hover': {
+															backgroundColor: "#f0f",
+														}
+													}
+													} 
+												})}
+												
+												/>
 										))
 									}
 									
@@ -466,6 +537,206 @@ const dashboard = () => {
 					</Grid>
 				</Box>
 			</Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<Modal
+				open={openUpdate}
+				display="flex"
+				alignItems="center"
+				justifyContent="center"
+				backgroundColor="primary.modal"
+				component={Box}>
+				<Box
+					width={theme.spacing(80)}
+					height={theme.spacing(55)}
+					backgroundColor="primary.contrastText"
+					marginTop={-5}
+					borderRadius={1}
+					elevation={2}
+					padding={2}
+					component={Paper}>
+					<Grid container width="100%" height="100%">
+						<Grid
+							item
+							xs={12}
+							height="8%"
+							display="flex"
+							alignItems="flex-start"
+							justifyContent="space-between"
+							padding={1}>
+							<ModalTitle>Editar Matéria</ModalTitle>
+							<IconButton
+								onClick={()=>setOpenUpdate(false)}
+								children={<Close />}
+								sx={{ color: '#FF6969' }}
+							/>
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							height="10%"
+							padding={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
+							</Grid>
+						<Grid
+							marginTop={4}
+							item
+							xs={12}
+							height="60%"
+							padding={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								
+							<Box
+								width="100%"
+								height={30}
+								display="flex"
+								justifyContent="space-between">
+								<ModalTitle>Categoria</ModalTitle>
+								<Box
+									width="60%"
+									height={30}
+									backgroundColor="#E8EBEE"
+									borderRadius={2}>
+									<IconButton sx={{ marginTop: -0.5 }}>
+										<Icon>search</Icon>
+									</IconButton>
+									<InputBase
+										value={busca}
+										onChange={(e)=> setBusca(e.target.value)}
+										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
+										placeholder="Pesquisar..."
+										inputProps={{
+											'aria-label': 'search google maps',
+										}}
+										fontSize="18px"
+									/>
+								</Box>
+							</Box>
+
+							<Box
+								maxHeight="40%"
+								width="100%"
+								display="flex"
+								gap={1}
+								flexWrap="wrap"
+							
+								sx={{overflowX:"auto", overFlowY: "none"}}
+								>
+									{
+										categorias && categorias.map((row, i) => (
+											<Chip 
+												key={i} 
+												label={row.categoriaNome} 
+												onClick={() => handleClickChip({ id: row.idCategoria})}
+												sx={selectCategoria.map((categoria)=>{
+													if(categoria.id == row.idCategoria){
+														return {backgroundColor: "#f0f",
+														'&.MuiChip-root:hover': {
+															backgroundColor: "#f0f",
+														}
+													}
+													} 
+												})}
+												
+												/>
+										
+											)
+												
+										)
+									}
+									
+							</Box>
+							<Box
+								maxHeight="50%"
+								width="100%"
+								display="flex"
+								gap={1}
+								flexWrap="wrap"
+								overflow="scroll">
+								
+							</Box>
+						</Grid>
+
+						<Grid
+							item
+							xs={12}
+							height="11%"
+							display="flex"
+							flexDirection="column"
+							justifyContent="stretch"
+							alignItems="stretch"
+							paddingLeft={3}
+							paddingRight={3}>
+							<Button
+								sx={{ textTransform: 'capitalize' }}
+								variant="contained"
+								onClick={()=>updateMateria()}
+							>
+								Atualizar
+							</Button>
+						</Grid>
+					</Grid>
+				</Box>
+			</Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
 					<Box
 						width="100%"
 						height={theme.spacing(7)}

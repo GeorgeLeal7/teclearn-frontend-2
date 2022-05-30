@@ -46,6 +46,16 @@ const getCategoriaByIdMateria = async (id) => {
 // 	}
 // };
 
+const remove = async (idMateria, idCategoria) => {
+	try {
+		const result = await Api.delete(`/materiacategoria/excluirMateriaCategoria?idMateria=${idMateria}&idCategoria=${idCategoria}`);
+		return result;
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao deletar o registro');
+	}
+};
+
 // const create = async datas => {
 // 	try {
 // 		const { data } = await Api.post(`/usuario/inserirUsuarioComum`, datas);
@@ -75,11 +85,12 @@ const getCategoriaByIdMateria = async (id) => {
 
 const CategoriaService = {
 	getAll,
-	getCategoriaByIdMateria
+	getCategoriaByIdMateria,
 	// getById,
 	// deleteById,
 	// create,
 	// update,
+	remove,
 };
 
 export { CategoriaService };
