@@ -80,6 +80,7 @@ const dashboard = () => {
 				alert(result.message);
 				return;
 			} else {
+				console.log(result);
 				setCurso(result);
 				setMaterias(result.tblCursosMaterias.map(row => row.tblMateriaIdMateria));
 				// console.log(result);
@@ -95,6 +96,7 @@ const dashboard = () => {
 					alert(result.message);
 					return;
 				} else {
+					console.log(result);
 					setMateriasSelectable(result);
 					console.log(result)
 				}
@@ -229,7 +231,7 @@ const dashboard = () => {
 											color="primary.fontMain"
 											display="flex"
 											>
-											{row.tblMateria.materiaNome}
+											{row.materiaNome}
 										</Typography>
 									</Box>
 									))
@@ -389,12 +391,14 @@ const dashboard = () => {
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 									{
-										materiasSelectable && materiasSelectable[0].map((row, i) => (
-											<Chip 
-												key={i} 
-												label={row.materiaNome} 
-												onClick={() => handleClickChip({ id: row.idMateria})}/>
-										))
+										// materiasSelectable && materiasSelectable[0].map((row, i) => (
+										// 	<Chip 
+										// 		key={i} 
+										// 		label={row.materiaNome} 
+										// 		onClick={() => handleClickChip({ id: row.idMateria})}/>
+										// ))
+
+									
 									}
 									
 							</Box>
