@@ -66,11 +66,19 @@ const dashboard = () => {
 				alert(result.message);
 				return;
 			} else {
-				console.log(result);
+				let array = [];
 				result.tblMateriasCategorias.map((row)=>{
-					setSelectCategoria([...selectCategoria, {id: row.tblCategoriaIdCategoria}]);
+
+						const id = {id: row.tblCategoriaIdCategoria};
+						array.push(id);
+						console.log(array);
+
+						
+						
+						
 				});
-			
+				
+				setSelectCategoria(array);
 			}
 		});
 	});
@@ -533,6 +541,8 @@ const dashboard = () => {
 							>
 								Cadastrar
 							</Button>
+
+							
 						</Grid>
 					</Grid>
 				</Box>
@@ -664,6 +674,7 @@ const dashboard = () => {
 												onClick={() => handleClickChip({ id: row.idCategoria})}
 												sx={selectCategoria.map((categoria)=>{
 													if(categoria.id == row.idCategoria){
+														console.log(categoria.id, row.idCategoria);
 														return {backgroundColor: "#f0f",
 														'&.MuiChip-root:hover': {
 															backgroundColor: "#f0f",
@@ -707,6 +718,13 @@ const dashboard = () => {
 								onClick={()=>updateMateria()}
 							>
 								Atualizar
+							</Button>
+							<Button
+								sx={{ textTransform: 'capitalize' }}
+								variant="contained"
+								onClick={()=>console.log(selectCategoria)}
+							>
+								log categorias
 							</Button>
 						</Grid>
 					</Grid>
