@@ -5,7 +5,7 @@ import { useDrawerContext } from '../../../shared/contexts';
 import BaseLayout from '../layout/BaseLayout';
 import { CursoService } from '../services/api/curso/CursoService';
 import { useRouter } from 'next/router';
-import { AddCircleOutline, Close, Delete, Edit } from '@mui/icons-material';
+import { AddCircleOutline, ArrowBack, Close, Delete, Edit, Save } from '@mui/icons-material';
 import { ModalTitle } from '../componnents/Texts/ModalTitle';
 import { MateriaService } from '../services/api/materia/MateriaService';
 import { CategoriaService } from '../services/api/categoria/CategoriaService';
@@ -701,10 +701,40 @@ const dashboard = () => {
 								
 							</Box>
 						</Grid>
-
 						<Grid
 							item
-							xs={12}
+							xs={6}
+							height="11%"
+							display="flex"
+							flexDirection="column"
+							justifyContent="stretch"
+							alignItems="stretch"
+							paddingLeft={3}
+							paddingRight={3}>
+							<Button
+								sx={{ textTransform: 'capitalize' }}
+								variant="contained"
+								onClick={()=>setOpen(false)}
+								startIcon={<ArrowBack />}
+							>
+								
+								Salvar e voltar
+								
+							</Button>
+						</Grid>
+						<Grid
+							item
+							xs={2}
+							height="11%"
+							display="flex"
+							flexDirection="column"
+							justifyContent="stretch"
+							alignItems="stretch"
+							paddingLeft={3}
+							paddingRight={3}></Grid>
+						<Grid
+							item
+							xs={4}
 							height="11%"
 							display="flex"
 							flexDirection="column"
@@ -716,8 +746,9 @@ const dashboard = () => {
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
 								onClick={()=>updateMateria()}
+								endIcon={<Save />}
 							>
-								Atualizar
+								Salvar
 							</Button>
 						</Grid>
 					</Grid>
