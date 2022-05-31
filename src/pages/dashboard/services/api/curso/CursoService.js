@@ -27,14 +27,14 @@ const getById = async id => {
 	}
 };
 
-// const deleteById = async id => {
-// 	try {
-// 		await Api.delete(`/usuario/excluirUsuarioComum/${id}`);
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao deletar o registro');
-// 	}
-// };
+const deleteById = async id => {
+	try {
+		await Api.delete(`/curso/excluirCurso/${id}`);
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao deletar o registro');
+	}
+};
 
 const create = async datas => {
 	console.log(datas);
@@ -85,7 +85,7 @@ const CursoService = {
 	getAll,
 	getById,
 	createMateriaCurso,
-	// deleteById,
+	deleteById,
 	create,
 	// update,
 };

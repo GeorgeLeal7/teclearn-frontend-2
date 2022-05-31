@@ -36,7 +36,7 @@ const dashboard = () => {
 	}, [router.query]);
 
 	const handleExcludeCategoria = () =>{
-
+		
 	};
 	
 	const handleClickMateria = (materia) => {

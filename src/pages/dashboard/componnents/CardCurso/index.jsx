@@ -2,9 +2,11 @@ import { ArrowBack, Close, Delete, Edit, Save } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Icon, IconButton, InputBase, Modal, Paper, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {useRouter} from 'next/router'
 import { useState } from 'react';
+import { CursoService } from '../../services/api/curso/CursoService';
+import { MateriaService } from '../../services/api/materia/MateriaService';
 import { ModalTitle } from '../Texts/ModalTitle';
 
-const CardCurso = ({id, nome, foto}) => {
+const CardCurso = ({id, nome, foto, getCursos}) => {
 	const theme = useTheme();
 	const router = useRouter();
 
@@ -15,12 +17,57 @@ const CardCurso = ({id, nome, foto}) => {
 	const [cursoNome, setCursoNome] = useState('');
 	const [busca, setBusca] = useState('');
 	const [materias, setMateras] = useState();
+	const [curso, setCurso] = useState();
+	const [cursoMaterias, setCursoMaterias] = useState([]);
 
 
-	const  handleClickEdit = (id) =>{
+
+	const handleClickEdit = (id) => {
+		setCursoById(id)
+		setAllMaterias();
 		setOpen(true);
-		console.log("a")
 	}
+
+	const handleClickSalvar = () => {
+		console.log(curso);
+		console.log(cursoMaterias)
+	}
+
+	const handleDelete = (result) => {
+		CursoService.deleteById(id).then(() => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				getCursos();
+			}
+		});
+	};
+
+	const setAllMaterias = () => {
+		MateriaService.getAll().then((result) => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setMateras(result);
+			}
+		})
+	}
+	const setCursoById = (id) => {
+		CursoService.getById(id).then((result) => {
+			if (result instanceof Error) {
+				alert(result.message);
+				return;
+			} else {
+				setCurso(result);
+				result.tblCursosMaterias.map(row => {
+					setCursoMaterias([...cursoMaterias, row.tblMateriaIdMateria])
+				})
+			}
+		})
+	}
+	
 
 	
 	return (
@@ -72,7 +119,7 @@ const CardCurso = ({id, nome, foto}) => {
 				display="flex"
 				justifyContent="center"
 				alignItems="center"
-				onClick={()=> handleClickEdit(id)}
+				
 				gap={1}
 				>
 
@@ -84,7 +131,8 @@ const CardCurso = ({id, nome, foto}) => {
 					display="flex" 
 					alignItems="center" 
 					borderRadius={0} 
-					sx={{cursor: "pointer", textTransform: "capitalize"}}
+					sx={{ cursor: "pointer", textTransform: "capitalize" }}
+					onClick={()=> handleClickEdit(id)}
 					>
 				<Edit  sx={{color:"#fff"}}/>
 				<Typography
@@ -110,7 +158,9 @@ const CardCurso = ({id, nome, foto}) => {
 					sx={{cursor: 'pointer','&:hover' : {
 						backgroundColor: '#3D97F0',
 				
-					}}}
+					}
+					}}
+					onClick={()=> handleDelete(id)}
 					>
 					<Delete sx={{color:"#3D97F0", '&:hover': {color:'#fff'}}}/>
 				</Box>
@@ -286,7 +336,7 @@ const CardCurso = ({id, nome, foto}) => {
 							<Button
 								sx={{ textTransform: 'capitalize' }}
 								variant="contained"
-								onClick={()=>updateMateria()}
+								onClick={()=>handleClickSalvar()}
 								endIcon={<Save />}
 							>
 								Salvar
