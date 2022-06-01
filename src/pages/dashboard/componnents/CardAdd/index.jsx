@@ -212,11 +212,11 @@ const CardAdd = ({findCursos}) => {
 								{materias && materias.map((row,i) => (
 									<Chip 
 										key={i} 
-										label={row.materia} 
+										label={row.materiaNome} 
 										onClick={() => handleClickChip({ id: row.idMateria, materiaNome: row.materiaNome })}
 										
 										sx={idMaterias.map((id) => { 
-											if (row.idMateria == id) {
+											if (row.idMateria == id.id) {
 												return {
 													backgroundColor: "#3D97F0",
 													color: "#fff",

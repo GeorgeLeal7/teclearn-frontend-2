@@ -16,7 +16,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 	const [open, setOpen] = useState(false);
 	const [cursoNome, setCursoNome] = useState('');
 	const [busca, setBusca] = useState('');
-	const [materias, setMateras] = useState();
+	const [materias, setMaterias] = useState();
 	const [curso, setCurso] = useState();
 	const [cursoMaterias, setCursoMaterias] = useState([]);
 
@@ -29,8 +29,8 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 	}
 
 	const handleClickSalvar = () => {
-		console.log(curso);
-		console.log(cursoMaterias)
+		console.log(materias);
+		console.log()
 	}
 
 	const handleDelete = (result) => {
@@ -50,7 +50,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 				alert(result.message);
 				return;
 			} else {
-				setMateras(result);
+				setMaterias(result);
 			}
 		})
 	}
@@ -67,6 +67,24 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 			}
 		})
 	}
+
+	const handleClickChip = (id) => {
+		var add = true
+		console.log(id.id);
+		materias.length != 0  && materias.map((idMateria, key) => {
+			if (idMateria.id == id.id) {
+				const a = materias;
+				a.splice(key, 1)
+				add = false;
+				setMaterias([]);
+				setTimeout(()=>{
+					setMaterias(a);
+				}, 100);
+			}
+		})
+		if (add) setMaterias([...materias, id]);
+		console.log(materias)
+	};
 	
 
 	
@@ -88,7 +106,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 					}}
 					width="100%"
 					height="70%"
-					src={'http://10.107.144.28:8080/uploads/' + foto}></Box>
+					src={'http://localhost:8080/uploads/' + foto}></Box>
 
 				<Box width="100%" height="30%" padding={1}>
 					<Typography
@@ -259,19 +277,19 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 										materias && materias.map((row, i) => (
 											<Chip
 												key={i} 
-												label={row.categoriaNome} 
-												// onClick={() => handleClickChip({ id: row.idCategoria})}
-												// sx={selectCategoria.map((categoria)=>{
-												// 	if(categoria.id == row.idCategoria){
-												// 		console.log(categoria.id, row.idCategoria);
-												// 		return {backgroundColor: "#3D97F0",
-												// 		color: "#fff",
-												// 		'&.MuiChip-root:hover': {
-												// 			backgroundColor: "#3D97F0",
-												// 		}
-												// 	}
-												// 	} 
-												// })}
+												label={row.materiaNome} 
+												onClick={() => handleClickChip({ id: row.idCategoria})}
+												sx={cursoMaterias.map((materia)=>{
+													if(materia.id == row.idMateria){
+														console.log(materia.id, row.idMateria);
+														return {backgroundColor: "#3D97F0",
+														color: "#fff",
+														'&.MuiChip-root:hover': {
+															backgroundColor: "#3D97F0",
+														}
+													}
+													} 
+												})}
 												
 												/>
 										
