@@ -47,7 +47,6 @@ const CardAdd = ({findCursos}) => {
 				alert(result.message);
 				return;
 			} else {
-				console.log(result);
 				setMaterias(result);
 			}
 		});
@@ -59,11 +58,12 @@ const CardAdd = ({findCursos}) => {
 		const array = [];
 		idMaterias.map((row, i) => {
 			array[i] = row.id;
+			formData.append('materias[]', array[i]);									
 		})
 
 		formData.append('cursoNome', cursoNome);
 		formData.append('files', img);
-		formData.append('materias', array);
+		
 
 		CursoService.create(formData).then((result) => {
 			setIdMaterias([]);
@@ -74,7 +74,6 @@ const CardAdd = ({findCursos}) => {
 	}
 	const handleClickChip = (id) => {
 		var add = true
-		console.log(id.id);
 		idMaterias.length != 0  && idMaterias.map((idMateria, key) => {
 			if (idMateria.id == id.id) {
 				const a = idMaterias;
@@ -87,7 +86,6 @@ const CardAdd = ({findCursos}) => {
 			}
 		})
 		if (add) setIdMaterias([...idMaterias, id]);
-		console.log(idMaterias)
 	};
 
 	return (

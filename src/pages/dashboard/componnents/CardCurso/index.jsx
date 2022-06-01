@@ -1,9 +1,10 @@
 import { ArrowBack, Close, Delete, Edit, Save } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Icon, IconButton, InputBase, Modal, Paper, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {useRouter} from 'next/router'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CursoService } from '../../services/api/curso/CursoService';
 import { MateriaService } from '../../services/api/materia/MateriaService';
+import { InputImage } from '../InputImage';
 import { ModalTitle } from '../Texts/ModalTitle';
 
 const CardCurso = ({id, nome, foto, getCursos}) => {
@@ -20,6 +21,8 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 	const [curso, setCurso] = useState();
 	const [cursoMaterias, setCursoMaterias] = useState([]);
 
+	const [img, setImg] = useState();
+
 
 
 	const handleClickEdit = (id) => {
@@ -29,8 +32,26 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 	}
 
 	const handleClickSalvar = () => {
-		console.log(materias);
-		console.log()
+		const formData = new FormData();
+
+		const array = [];
+		cursoMaterias.map((row, i) => {
+			array[i] = row.id;
+			formData.append('materias[]', array[i]);									
+		})
+
+		formData.append('cursoNome', cursoNome);
+		formData.append('files', img);
+		
+
+		CursoService.update(formData, curso.idCurso).then((result) => {
+			// setIdMaterias([]);
+			// setCursoNome('');
+			// findCursos();
+			console.log("alterado com sucesso");
+		});
+		
+	
 	}
 
 	const handleDelete = (result) => {
@@ -61,8 +82,15 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 				return;
 			} else {
 				setCurso(result);
-				result.tblCursosMaterias.map(row => {
-					setCursoMaterias([...cursoMaterias, row.tblMateriaIdMateria])
+				setImg('http://10.107.144.28:8080/uploads/' + result.cursoImagem);
+				setCursoNome(result.cursoNome);
+				
+				let array = [];
+				result.tblCursosMaterias.map((row, i) => {
+					
+					if (i == 0) { array = [...cursoMaterias] }
+					array =[...array,  row.tblMateriaIdMateria]
+					setCursoMaterias(array)
 				})
 			}
 		})
@@ -70,20 +98,18 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 
 	const handleClickChip = (id) => {
 		var add = true
-		console.log(id.id);
-		materias.length != 0  && materias.map((idMateria, key) => {
-			if (idMateria.id == id.id) {
-				const a = materias;
+		cursoMaterias.length != 0  && cursoMaterias.map((idMateria, key) => {
+			if (idMateria == id.id) {
+				const a = cursoMaterias;
 				a.splice(key, 1)
 				add = false;
-				setMaterias([]);
+				setCursoMaterias([]);
 				setTimeout(()=>{
-					setMaterias(a);
+					setCursoMaterias(a);
 				}, 100);
 			}
 		})
-		if (add) setMaterias([...materias, id]);
-		console.log(materias)
+		if (add) setCursoMaterias([...cursoMaterias, id]);
 	};
 	
 
@@ -106,7 +132,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 					}}
 					width="100%"
 					height="70%"
-					src={'http://localhost:8080/uploads/' + foto}></Box>
+					src={'http://10.107.144.28:8080/uploads/' + foto}></Box>
 
 				<Box width="100%" height="30%" padding={1}>
 					<Typography
@@ -205,7 +231,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 						<Grid
 							item
 							xs={12}
-							height="8%"
+							height="4%"
 							display="flex"
 							alignItems="flex-start"
 							justifyContent="space-between"
@@ -220,29 +246,37 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 						<Grid
 							item
 							xs={12}
-							height="10%"
-							padding={3}
+							paddingLeft={3}
+							paddingRight={3}
+							// backgroundColor="#f0f"
 							display="flex"
-							flexDirection="column"
+							alignItems="flex-end"
 							gap={2}>
-								 <TextField value={cursoNome} onChange={(e)=>setCursoNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
-							</Grid>
+							<TextField
+								value={cursoNome}
+								onChange={(e)=>setCursoNome(e.target.value)}
+								fullWidth
+								variant="standard"
+								label="Nome"
+								size="large"
+							/>
+							<InputImage img={img} setImg={setImg} />
+						</Grid>
 						<Grid
-							marginTop={4}
 							item
 							xs={12}
-							height="60%"
-							padding={3}
+							paddingLeft={3}
+							paddingRight={3}
+							paddingTop={2}
 							display="flex"
 							flexDirection="column"
 							gap={2}>
-								
 							<Box
 								width="100%"
 								height={30}
 								display="flex"
 								justifyContent="space-between">
-								<ModalTitle>Materias</ModalTitle>
+								<ModalTitle>Matérias</ModalTitle>
 								<Box
 									width="60%"
 									height={30}
@@ -265,12 +299,12 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 							</Box>
 
 							<Box
-								maxHeight="40%"
+								minHeight={80}
+								maxHeight={110}
 								width="100%"
 								display="flex"
 								gap={1}
 								flexWrap="wrap"
-							
 								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 									{
@@ -278,10 +312,9 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 											<Chip
 												key={i} 
 												label={row.materiaNome} 
-												onClick={() => handleClickChip({ id: row.idCategoria})}
+												onClick={() => handleClickChip({ id: row.idMateria})}
 												sx={cursoMaterias.map((materia)=>{
-													if(materia.id == row.idMateria){
-														console.log(materia.id, row.idMateria);
+													if(materia == row.idMateria){
 														return {backgroundColor: "#3D97F0",
 														color: "#fff",
 														'&.MuiChip-root:hover': {

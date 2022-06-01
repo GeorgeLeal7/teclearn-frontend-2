@@ -66,20 +66,21 @@ const createMateriaCurso = async datas =>{
 	}
 }
 
-// const update = async (datas, id) => {
-// 	try {
-// 		const { data } = await Api.put(
-// 			`/usuario/alterarUsuarioComum/${id}`,
-// 			datas
-// 		);
-// 		if (data) return data.id;
+const update = async (datas, id) => {
+	try {
+		const { data } = await Api.put(`/curso/alterarCurso/${id}`,datas, {
+			headers: {
+			"Content-Type": `multipart/form-data;`,
+			}
+		  });
+		if (data) return data.id;
 
-// 		return new Error('Erro ao atualizar o registro');
-// 	} catch (error) {
-// 		console.log(error);
-// 		return new Error(error.message || 'Erro ao atualizar o registro');
-// 	}
-// };
+		return new Error('Erro ao criar o registro');
+	} catch (error) {
+		console.log(error);
+		return new Error(error.message || 'Erro ao criar o registro');
+	}
+};
 
 const CursoService = {
 	getAll,
@@ -87,7 +88,7 @@ const CursoService = {
 	createMateriaCurso,
 	deleteById,
 	create,
-	// update,
+	update,
 };
 
 export {CursoService};
