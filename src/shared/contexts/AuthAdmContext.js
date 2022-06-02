@@ -16,8 +16,7 @@ const AuthProvider = ({ children }) => {
 			senha,
 		}).then(result => {
 			if (result instanceof Error) {
-				alert(result.message);
-				return;
+				return false;
 			}
 			setCookie(null, 'teclearn.token', result.token, {
 				maxAge: 60 * 60 * 1, // 1 hour

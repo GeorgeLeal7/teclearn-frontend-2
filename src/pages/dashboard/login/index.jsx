@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
 
 import { AuthAdmContext } from '../../../shared/contexts/AuthAdmContext';
+import { AlertDialog } from '../componnents/AlertDialog';
 
 
 const dashboard = () => {
@@ -16,9 +17,35 @@ const dashboard = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
+  const [message, setMessage] = useState({
+		open: false,
+		severity: '',
+		message: '',
+	});
+
+
 
 	const handleSignIn = data => {
-		signIn(data);
+    if(data.email && data.senha){
+      const result = signIn(data);
+      if(!result){
+        setMessage({
+          open: true,
+          severity: 'warning',
+          message: 'Usuário ou senha inválidos',
+        });
+        setEmail("");
+        setPassword("");
+      }
+    }else{
+      setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha todos os campos.',
+			});
+
+    }
+		
 	};
 
 
@@ -34,6 +61,13 @@ const dashboard = () => {
         marginTop={20}
         padding={4.5}
       > 
+      <AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
+
         <Grid container direction="column" spacing={2}>
           <Grid item >
             <Typography

@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import { setCookie } from 'nookies';
 import { useState } from 'react';
+import { AlertDialog } from '../componnents/AlertDialog';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
 import { LoginService } from '../services/api/login/LoginService';
 
@@ -13,28 +14,49 @@ const dashboard = () => {
   const router = useRouter();
   const [email, setEmail] = useState();
 
+  const [message, setMessage] = useState({
+		open: false,
+		severity: '',
+		message: '',
+	});
+
   const handleClickSendEmail = () => {
-    LoginService.sendEmail({
-      email,
-    }).then(result => {
-      if (result instanceof Error) {
-        alert(result.message);
-        return;
-      } else if(result.token){
-        console.log(result);
-        setCookie(null, 'newPasswordToken', result.token, {
-          maxAge: 60 * 60 * 1, // 1 hour
-        });
-        setCookie(null, 'idUsuario', result.idUsuario, {
-          maxAge: 60 * 60 * 1, // 1 hour
-        });
-        setCookie(null, 'email', result.email, {
-          maxAge: 60 * 60 * 1, // 1 hour
-        });
-        router.push('/dashboard/login/verificarToken');
-      }
-    });
+    if(email){
+      LoginService.sendEmail({
+        email,
+      }).then(result => {
+        if (result instanceof Error) {
+          setMessage({
+            open: true,
+            severity: 'warning',
+            message: 'E-mail inválido, preencha novamente.',
+          });
+          setEmail("");
+          return;
+        } else if(result.token){
+          console.log(result);
+          setCookie(null, 'newPasswordToken', result.token, {
+            maxAge: 60 * 60 * 1, // 1 hour
+          });
+          setCookie(null, 'idUsuario', result.idUsuario, {
+            maxAge: 60 * 60 * 1, // 1 hour
+          });
+          setCookie(null, 'email', result.email, {
+            maxAge: 60 * 60 * 1, // 1 hour
+          });
+          router.push('/dashboard/login/verificarToken');
+        }
+      });
+    }else{
+      setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha seu email.',
+			});
+
+    }
   }
+   
 	
 	return (
 			<BaseLoginLayout>
@@ -47,6 +69,12 @@ const dashboard = () => {
         marginTop={20}
         padding={4.5}
       > 
+       <AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
         <Grid container direction="column" spacing={2}>
           <Grid item >
             <Typography

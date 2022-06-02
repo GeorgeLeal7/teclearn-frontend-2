@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import { destroyCookie, parseCookies } from 'nookies';
 import { useState } from 'react';
+import { AlertDialog } from '../componnents/AlertDialog';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
 
 
@@ -14,13 +15,31 @@ const dashboard = () => {
   const [token, setToken] = useState();
   const { newPasswordToken } = parseCookies();
   const { email } = parseCookies();
+  const [message, setMessage] = useState({
+		open: false,
+		severity: '',
+		message: '',
+	});
 	
   const handleClickVerifyToken = () => {
-    if (newPasswordToken == token) {
-      router.push('/dashboard/login/redefinicaoSenha');
-      destroyCookie(null, 'newPasswordToken', {path: '/'});
-    } else {
-      console.log('token invalido');
+    if(token){
+      if (newPasswordToken == token) {
+        router.push('/dashboard/login/redefinicaoSenha');
+        destroyCookie(null, 'newPasswordToken', {path: '/'});
+      } else {
+        setMessage({
+          open: true,
+          severity: 'warning',
+          message: 'Token inválido.',
+        });
+        setToken("");
+      }
+    }else{
+      setMessage({
+        open: true,
+        severity: 'warning',
+        message: 'Preencha o token.',
+      });
     }
   };
 
@@ -35,6 +54,12 @@ const dashboard = () => {
         marginTop={20}
         padding={4.5}
       > 
+       <AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
         <Grid container direction="column" spacing={2}>
           <Grid item >
             <Typography

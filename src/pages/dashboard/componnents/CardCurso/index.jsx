@@ -82,7 +82,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 				return;
 			} else {
 				setCurso(result);
-				setImg('http://10.107.144.28:8080/uploads/' + result.cursoImagem);
+				setImg('http://localhost:8080/uploads/' + result.cursoImagem);
 				setCursoNome(result.cursoNome);
 				
 				let array = [];
