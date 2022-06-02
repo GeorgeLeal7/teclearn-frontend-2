@@ -5,12 +5,12 @@ const nextConfig = {
 			afterFiles: [
 				{
 					source: '/:path*',
-					destination: `http://localhost:8080/:path*`,
+					destination: `http://10.107.144.28:8080/:path*`,
 				},
 			],
 		};
 	},
 	reactStrictMode: true,
-};
+};	
 
 module.exports = nextConfig;

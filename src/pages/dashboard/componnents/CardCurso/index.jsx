@@ -36,12 +36,13 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 
 		const array = [];
 		cursoMaterias.map((row, i) => {
-			array[i] = row.id;
+			array[i] = row;
 			formData.append('materias[]', array[i]);									
 		})
 
+	
 		formData.append('cursoNome', cursoNome);
-		formData.append('files', img);
+		formData.append('files', img);	
 		
 
 		CursoService.update(formData, curso.idCurso).then((result) => {
@@ -82,7 +83,7 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 				return;
 			} else {
 				setCurso(result);
-				setImg('http://localhost:8080/uploads/' + result.cursoImagem);
+				setImg('http://10.107.144.28:8080/uploads/' + result.cursoImagem);
 				setCursoNome(result.cursoNome);
 				
 				let array = [];
@@ -98,18 +99,21 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 
 	const handleClickChip = (id) => {
 		var add = true
-		cursoMaterias.length != 0  && cursoMaterias.map((idMateria, key) => {
+		cursoMaterias.length > 0  && cursoMaterias.map((idMateria, key) => {
 			if (idMateria == id.id) {
-				const a = cursoMaterias;
-				a.splice(key, 1)
+				let array = cursoMaterias;
+				array.splice(key, 1);
 				add = false;
 				setCursoMaterias([]);
-				setTimeout(()=>{
-					setCursoMaterias(a);
-				}, 100);
+				setTimeout(() => {
+					setCursoMaterias(array);
+				});
+				
 			}
 		})
-		if (add) setCursoMaterias([...cursoMaterias, id]);
+		if (add) setCursoMaterias([...cursoMaterias, id.id]);
+
+		console.log("cursoMaterias:" + cursoMaterias);
 	};
 	
 

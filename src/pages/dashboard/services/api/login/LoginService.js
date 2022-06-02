@@ -7,7 +7,6 @@ const login = async datas => {
 
 		return new Error('Erro ao criar o registro');
 	} catch (error) {
-		console.log(error);
 		return new Error(error.message || 'Erro ao criar o registro');
 	}
 };

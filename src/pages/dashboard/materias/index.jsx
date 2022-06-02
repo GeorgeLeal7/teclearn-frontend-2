@@ -757,6 +757,187 @@ const dashboard = () => {
 
 
 
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			<Modal
+				open={open}
+				display="flex"
+				alignItems="center"
+				justifyContent="center"
+				backgroundColor="primary.modal"
+				component={Box}>
+				<Box
+					width={theme.spacing(80)}
+					height={theme.spacing(55)}
+					backgroundColor="primary.contrastText"
+					marginTop={-5}
+					borderRadius={1}
+					elevation={2}
+					padding={2}
+					component={Paper}>
+					<Grid container width="100%" height="100%">
+						<Grid
+							item
+							xs={12}
+							height="8%"
+							display="flex"
+							alignItems="flex-start"
+							justifyContent="space-between"
+							padding={1}>
+							<ModalTitle>Cadastrar Categoria</ModalTitle>
+							<IconButton
+								onClick={()=>setOpen(false)}
+								children={<Close />}
+								sx={{ color: '#FF6969' }}
+							/>
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							height="10%"
+							padding={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
+							</Grid>
+						<Grid
+							marginTop={4}
+							item
+							xs={12}
+							height="60%"
+							padding={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								
+							<Box
+								width="100%"
+								height={30}
+								display="flex"
+								justifyContent="space-between">
+								<ModalTitle>Categoria</ModalTitle>
+								<Box
+									width="60%"
+									height={30}
+									backgroundColor="#E8EBEE"
+									borderRadius={2}>
+									<IconButton sx={{ marginTop: -0.5 }}>
+										<Icon>search</Icon>
+									</IconButton>
+									<InputBase
+										value={busca}
+										onChange={(e)=> setBusca(e.target.value)}
+										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
+										placeholder="Pesquisar..."
+										inputProps={{
+											'aria-label': 'search google maps',
+										}}
+										fontSize="18px"
+									/>
+								</Box>
+							</Box>
+
+							<Box
+								maxHeight="40%"
+								width="100%"
+								display="flex"
+								gap={1}
+								flexWrap="wrap"
+							
+								sx={{overflowX:"auto", overFlowY: "none"}}
+								>
+									{
+										categorias && categorias.map((row, i) => (
+											<Chip 
+												key={i} 
+												label={row.categoriaNome} 
+												onClick={() => handleClickChip({ id: row.idCategoria})}
+												sx={selectCategoria.map((categoria)=>{
+													if(categoria.id == row.idCategoria){
+														return {backgroundColor: "#3D97F0",
+														color: "#fff",
+														'&.MuiChip-root:hover': {
+															backgroundColor: "#3D97F0",
+														}
+													}
+													} 
+												})}
+												
+												/>
+										))
+									}
+									
+							</Box>
+							<Box
+								maxHeight="50%"
+								width="100%"
+								display="flex"
+								gap={1}
+								flexWrap="wrap"
+								overflow="scroll">
+								
+							</Box>
+						</Grid>
+
+						<Grid
+							item
+							xs={12}
+							height="11%"
+							display="flex"
+							flexDirection="column"
+							justifyContent="stretch"
+							alignItems="stretch"
+							paddingLeft={3}
+							paddingRight={3}>
+							<Button
+								sx={{ textTransform: 'capitalize' }}
+								variant="contained"
+								onClick={()=>createMateria()}
+							>
+								Cadastrar
+							</Button>
+
+							
+						</Grid>
+					</Grid>
+				</Box>
+			</Modal>
+
+					
+
+
+
+
+
+
+
 
 
 

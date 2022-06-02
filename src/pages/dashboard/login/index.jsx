@@ -11,33 +11,19 @@ import { AlertDialog } from '../componnents/AlertDialog';
 
 const dashboard = () => {
   const theme = useTheme();
-  const { signIn } = useContext(AuthAdmContext);
+  const { signIn, message, setMessage} = useContext(AuthAdmContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const [message, setMessage] = useState({
-		open: false,
-		severity: '',
-		message: '',
-	});
 
-
-
-	const handleSignIn = data => {
+	const handleSignIn = async data => {
     if(data.email && data.senha){
-      const result = signIn(data);
-      if(!result){
-        setMessage({
-          open: true,
-          severity: 'warning',
-          message: 'Usuário ou senha inválidos',
-        });
+      const result = await signIn(data);
         setEmail("");
         setPassword("");
-      }
-    }else{
+    } else {
       setMessage({
 				open: true,
 				severity: 'warning',
@@ -45,6 +31,7 @@ const dashboard = () => {
 			});
 
     }
+    
 		
 	};
 
