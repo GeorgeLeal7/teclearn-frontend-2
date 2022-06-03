@@ -21,7 +21,7 @@ import {
 import nookies from 'nookies'
 import { ReputationBar } from './componnents/ReputationBar';
 import { ColumnTitle } from './componnents/Texts/ColumnTitle';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MenuDrawer } from './componnents/menuDrawer/MenuDrawer';
 import UserToolbar from './componnents/userToolbar/UserToolbar';
 import { useDrawerContext } from '../../shared/contexts';
@@ -36,10 +36,13 @@ import { check } from 'prettier';
 import { EditUser } from './componnents/EditUser';
 import { parseCookies } from 'nookies';
 import { blue, deepOrange, green, pink, yellow } from '@mui/material/colors';
+import { AuthAdmContext } from '../../shared/contexts/AuthAdmContext';
+import { AlertDialog } from './componnents/AlertDialog'
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
 	const theme = useTheme();
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
+	const { message, setMessage} = useContext(AuthAdmContext);
 
 	const [openDeleteConfirm, setOpeDeleteConfirm] = useState(false);
 	const [openUserCard, setOpenUserCard] = useState(false);
@@ -94,20 +97,37 @@ const dashboard = () => {
 	
 
 	const handleClickCreate = () => {
-		UserService.create({
-			nome: name,
-			email: email,
-			classificacao: categoria,
-			moderador: checked,
-			pontuacao: 0,
-			reputacao: 100,
-			status: true,
-			foto: '',
-			senha: 'SENHA!@#',
-		}).then(() => {
-			setOpen(false);
-			listUsers();
-		});
+		if(name && email && categoria){
+			if(email.indexOf("@") > -1){
+				UserService.create({
+					nome: name,
+					email: email,
+					classificacao: categoria,
+					moderador: checked,
+					pontuacao: 0,
+					reputacao: 100,
+					status: true,
+					foto: '',
+					senha: 'SENHA!@#',
+				}).then(() => {
+					setOpen(false);
+					listUsers();
+				});
+			}else{
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Digite um e-mail valido',
+				});
+			}
+		}else{
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha todos os campos.',
+			});
+		}
+		
 	};
 
 	const handleClickSearch = id => {
@@ -180,6 +200,12 @@ const dashboard = () => {
 					setStatus={setFilterStatus}
 					setModerador={setFilterModerador}
 				/>
+				 <AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
 				<TableContainer
 					width="100%"
 					height="100%"
