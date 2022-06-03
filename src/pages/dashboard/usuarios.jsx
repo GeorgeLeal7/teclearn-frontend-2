@@ -97,22 +97,43 @@ const dashboard = () => {
 	
 
 	const handleClickCreate = () => {
-		if(name && email && categoria){
-			if(email.indexOf("@") > -1){
-				UserService.create({
-					nome: name,
-					email: email,
-					classificacao: categoria,
-					moderador: checked,
-					pontuacao: 0,
-					reputacao: 100,
-					status: true,
-					foto: '',
-					senha: 'SENHA!@#',
-				}).then(() => {
-					setOpen(false);
-					listUsers();
-				});
+		if(name && email){
+			if (email.indexOf("@") > -1) {
+				if (categoria) {
+					UserService.create({
+						nome: name,
+						email: email,
+						classificacao: categoria,
+						moderador: checked,
+						pontuacao: 0,
+						reputacao: 100,
+						status: true,
+						foto: '',
+						senha: 'SENHA!@#',
+					}).then((result) => {
+						if (result instanceof Error) {
+							setMessage({
+								open: true,
+								severity: 'success',
+								message: 'Falha ao inserir o usuário',
+							});
+						} else {
+							setOpen(false);
+							listUsers();
+							setMessage({
+								open: true,
+								severity: 'success',
+								message: 'Usuário cadastrado com sucesso',
+							});
+						}
+					});
+				} else {
+					setMessage({
+						open: true,
+						severity: 'warning',
+						message: 'Selecione uma categoria de usuário',
+					});
+				}
 			}else{
 				setMessage({
 					open: true,
@@ -154,8 +175,22 @@ const dashboard = () => {
 		});
 	};
 
-	const handleClickDelete = async () => {
-		await UserService.deleteById(userID);
+	const handleClickDelete =  () => {
+		UserService.deleteById(userID).then((result) => {
+			if (result instanceof Error) {
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Falha ao deletar usuário',
+				});
+			} else {
+				setMessage({
+					open: true,
+					severity: 'success',
+					message: 'Usuário deletado com sucesso.',
+				});
+			}
+		})
 		listUsers();
 		setOpeDeleteConfirm(false);
 	};

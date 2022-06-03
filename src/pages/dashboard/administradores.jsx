@@ -18,7 +18,7 @@ import {
 	TextField,
 } from '@mui/material';
 import { ColumnTitle } from './componnents/Texts/ColumnTitle';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MenuDrawer } from './componnents/menuDrawer/MenuDrawer';
 import UserToolbar from './componnents/userToolbar/UserToolbar';
 import { useDrawerContext } from '../../shared/contexts';
@@ -30,12 +30,16 @@ import { ToolbarSelect } from './componnents/ToolbarSelect';
 import BasicToolbar from './componnents/BasicToolbar/BasicToolbar';
 import { AdminService } from './services/api/administrador/AdminService';
 import { parseCookies } from 'nookies';
+import { AuthAdmContext } from '../../shared/contexts/AuthAdmContext';
+import { AlertDialog } from './componnents/AlertDialog';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
 	const theme = useTheme();
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
+
+	const { message, setMessage} = useContext(AuthAdmContext);
 
 	const [admins, setAdmins] = useState();
 	const [admin, setAdmin] = useState();
@@ -54,18 +58,50 @@ const dashboard = () => {
 		setIsUpdate(false)
 	};
 
-	const createAdmin = ()=>{
-		AdminService.create({
-			nome: nome,
-			email: email,
-			senha: "123",
-			status: 1,
-			classificacao: "administrador"
-		}).then(() => {
-			setOpen(false);
-			listAdmins();
-		});
-	};
+	const createAdmin = () => {
+		if (nome && email) {
+			if (email.indexOf("@") > -1) {
+				AdminService.create({
+					nome: nome,
+					email: email,
+					senha: "123",
+					status: 1,
+					classificacao: "administrador"
+				}).then((result) => {
+					if (result instanceof Error) {
+						setMessage({
+							open: true,
+							severity: 'warning',
+							message: 'Falha ao cadastrar administrador.'
+						});
+					} else {
+						setMessage({
+							open: true,
+							severity: 'success',
+							message: 'Usuario cadastrado com sucesso.'
+						});
+					}
+					setOpen(false);
+					listAdmins();
+				});
+			} else {
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Email inválido, preencha novamente.'
+				});
+			}
+		} else {
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha todos os campos.'
+			});
+		}
+		}
+	
+		
+	
 
 	const updateAdmin = (id)=>{
 		AdminService.update({
@@ -93,7 +129,21 @@ const dashboard = () => {
 	}
 
 	const handleClickDelete = ()=>{
-		 AdminService.deleteById(idAdmin);
+		AdminService.deleteById(idAdmin).then((result) => {
+			if (result instanceof Error) {
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Falha ao deletar administrador.'
+				});
+			} else {
+				setMessage({
+					open: true,
+					severity: 'success',
+					message: 'Administrador deletado com sucesso.'
+				});
+			 }
+		 })
 		listAdmins();
 		setOpenDeleteConfirm(false);
 	}
@@ -147,6 +197,12 @@ const dashboard = () => {
 	}, []);
 	return (
 		<MenuDrawer>
+			<AlertDialog	
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
 			<BaseLayout onClick={handleOpen} title="Administrador">
 				<BasicToolbar title="Administradores" />
 				<TableContainer

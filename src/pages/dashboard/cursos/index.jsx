@@ -8,6 +8,7 @@ import { CardAdd } from '../componnents/CardAdd';
 import { CursoService } from '../services/api/curso/CursoService';
 import { parseCookies } from 'nookies';
 
+
 const dashboard = () => {
 	const theme = useTheme();
 	const { handleSetDrawerOptions } = useDrawerContext();

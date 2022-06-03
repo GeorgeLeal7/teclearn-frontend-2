@@ -15,7 +15,8 @@ import {
 	Toolbar,
 } from '@mui/material';
 import { blue, deepOrange, green, pink, yellow } from '@mui/material/colors';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthAdmContext } from '../../../../shared/contexts/AuthAdmContext';
 import { UserService } from '../../services/api/user/UserService';
 import { ReputationBar } from '../ReputationBar';
 import { ModalTitle } from '../Texts/ModalTitle';
@@ -23,6 +24,7 @@ import { ToolbarSelect } from '../ToolbarSelect';
 
 const EditUser = ({ setOpenUserCard, listUsers, data, handleClickEdit }) => {
 	const theme = useTheme();
+	const { message, setMessage} = useContext(AuthAdmContext);
 
 	const [idUsuarioComum, setIdUsuarioComum] = useState(data.idUsuarioComum);
 	const [nome, setNome] = useState(data.tblUsuario.nome);
@@ -44,25 +46,59 @@ const EditUser = ({ setOpenUserCard, listUsers, data, handleClickEdit }) => {
 
 
 	const updateUser = () => {
-		const result = UserService.update(
-			{
-				nome,
-				email,
-				classificacao,
-				moderador,
-				status: data.tblUsuario.status,
-				biografia: sobre,
-				apelido: tag,
-			},
-			data.tblUsuarioIdUsuario
-		).then(() => {
-			if (result instanceof Error) {
-				alert(result.message);
-				return;
+		if (nome ) {
+			if (email) {
+				if (email.indexOf("@") > -1) {
+					const result = UserService.update(
+						{
+							nome,
+							email,
+							classificacao,
+							moderador,
+							status: data.tblUsuario.status,
+							biografia: sobre,
+							apelido: tag,
+						},
+						data.tblUsuarioIdUsuario
+					).then(() => {
+						if (result instanceof Error) {
+							setMessage({
+								open: true,
+								severity: 'warning',
+								message: 'Falha ao atualizar usuário.',
+							});
+						} else {
+							setMessage({
+								open: true,
+								severity: 'success',
+								message: 'Usuário atualizado com sucesso.',
+							});
+							listUsers();
+						}
+					});
+				} else {
+					setMessage({
+						open: true,
+						severity: 'warning',
+						message: 'E-mail inválido preencha novamente.',
+					});
+					setEmail('');
+				}
 			} else {
-				listUsers();
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'o campo email é obrigatório.',
+				});
 			}
-		});
+		} else {
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'O campo nome é obrigatório.',
+			});
+		}
+		
 	};
 
 	const removeUserImage = () => {

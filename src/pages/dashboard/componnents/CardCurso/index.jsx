@@ -1,15 +1,20 @@
 import { ArrowBack, Close, Delete, Edit, Save } from '@mui/icons-material';
 import { Box, Button, Chip, Grid, Icon, IconButton, InputBase, Modal, Paper, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import {useRouter} from 'next/router'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AuthAdmContext } from '../../../../shared/contexts/AuthAdmContext';
 import { CursoService } from '../../services/api/curso/CursoService';
 import { MateriaService } from '../../services/api/materia/MateriaService';
+import { AlertDialog } from '../AlertDialog';
 import { InputImage } from '../InputImage';
 import { ModalTitle } from '../Texts/ModalTitle';
 
 const CardCurso = ({id, nome, foto, getCursos}) => {
 	const theme = useTheme();
 	const router = useRouter();
+
+	const { message, setMessage} = useContext(AuthAdmContext);
+
 
 	const lgDown = useMediaQuery(theme.breakpoints.down(1400));
 	const exUp = useMediaQuery(theme.breakpoints.up(1900));
@@ -32,35 +37,77 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 	}
 
 	const handleClickSalvar = () => {
-		const formData = new FormData();
+		if (cursoNome) {
+			if (img) {
+				const formData = new FormData();
 
-		const array = [];
-		cursoMaterias.map((row, i) => {
-			array[i] = row;
-			formData.append('materias[]', array[i]);									
-		})
+				const array = [];
+				cursoMaterias.map((row, i) => {
+					array[i] = row;
+					formData.append('materias[]', array[i]);									
+				})
 
-	
-		formData.append('cursoNome', cursoNome);
-		formData.append('files', img);	
+			
+				formData.append('cursoNome', cursoNome);
+				formData.append('files', img);	
+				
+
+				CursoService.update(formData, curso.idCurso).then((result) => {
+					console.log(result);
+					if (result instanceof Error) {
+						setMessage({
+							open: true,
+							severity: 'warning',
+							message: 'Falha ao atualizar o curso.'
+						});
+					} else {
+						setMessage({
+							open: true,
+							severity: 'success',
+							message: 'Curso atualizado com sucesso'
+						});
+					}
+						
 		
-
-		CursoService.update(formData, curso.idCurso).then((result) => {
-			// setIdMaterias([]);
-			// setCursoNome('');
-			// findCursos();
-			console.log("alterado com sucesso");
-		});
+					// setIdMaterias([]);
+					// setCursoNome('');
+					// findCursos();
+				
+				});
+				
+			} else {
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Selecione uma imagem.'
+				});
+			}
+		} else {
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha o nome do curso.'
+			});
+		}
 		
 	
 	}
 
-	const handleDelete = (result) => {
-		CursoService.deleteById(id).then(() => {
+	const handleDelete = () => {
+		CursoService.deleteById(id).then((result) => {
 			if (result instanceof Error) {
-				alert(result.message);
-				return;
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Falha ao deletar curso.'
+				});
+				
 			} else {
+				setMessage({
+					open: true,
+					severity: 'success',
+					message: 'Curso deletado com sucesso.',
+				});
 				getCursos();
 			}
 		});
@@ -129,6 +176,12 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 				elevation={3}
 				overflow="hidden"
 				position="relative">
+				<AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
 				<Box
 					component="img"
 					sx={{
