@@ -198,11 +198,6 @@ const dashboard = () => {
 	useEffect(() => {
 		handleSetDrawerOptions([
 			{
-				icon: 'home',
-				path: '/dashboard/geral',
-				label: 'Pagina Inicial',
-			},
-			{
 				icon: 'person_add_alt_1',
 				path: '/dashboard/usuarios',
 				label: 'Usuários',
