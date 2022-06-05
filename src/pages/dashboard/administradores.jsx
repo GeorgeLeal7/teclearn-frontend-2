@@ -104,16 +104,45 @@ const dashboard = () => {
 	
 
 	const updateAdmin = (id)=>{
-		AdminService.update({
-			nome: nome,
-			email: email,
-			senha: "123",
-			status: 1,
-			classificacao: "administrador"
-		}, id).then(() => {
-			setOpen(false);
-			listAdmins();
-		});
+		if(email && nome){
+			if(email.indexOf("@") > -1){
+				AdminService.update({
+					nome: nome,
+					email: email,
+					senha: "123",
+					status: 1,
+					classificacao: "administrador"
+				}, id).then((result) => {
+					if(result instanceof Error){
+						setMessage({
+							open: true,
+							severity: 'warning',
+							message: 'Email inválido, preencha novamente.'
+						});
+					}else{
+						setMessage({
+							open: true,
+							severity: 'success',
+							message: 'Administrador atuzalizdo com sucesso'
+						});
+						listAdmins();
+					}
+				});
+			}else{
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Email inválido, preencha novamente.'
+				});
+			}
+		}else{
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha todos os campos.'
+			});
+		}
+	
 	};
 	const listAdmins=() =>{
 		AdminService.getAll().then(result => {
