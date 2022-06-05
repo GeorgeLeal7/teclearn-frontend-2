@@ -3,7 +3,7 @@ import { useTheme } from '@emotion/react';
 import { Box, Grid, Icon, IconButton, InputBase } from '@mui/material';
 import { TableTitle } from '../Texts/TableTitle';
 
-const BasicToolbar = ({ title }) => {
+const BasicToolbar = ({ title, busca, setBusca}) => {
 	const theme = useTheme();
 
 	return (
@@ -40,6 +40,8 @@ const BasicToolbar = ({ title }) => {
 							placeholder="Pesquisar..."
 							inputProps={{ 'aria-label': 'search google maps' }}
 							fontSize="18px"
+							onChange={(e)=> setBusca(e.target.value)}
+							value={busca}
 						/>
 					</Box>
 				</Grid>

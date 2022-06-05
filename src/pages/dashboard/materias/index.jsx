@@ -29,6 +29,7 @@ const dashboard = () => {
 	const [materia, setMateria] = useState();
 	const [materiasSelectable, setMateriasSelectable] = useState();	
 	const [busca, setBusca] = useState();
+	const [buscaCategoria, setBuscaCategoria] = useState();
 	const [openDeleteConfirm, setOpeDeleteConfirm] = useState(false);
 	const [materiaId, setMateriaId] = useState();
 
@@ -107,7 +108,7 @@ const dashboard = () => {
 		getCategoriaByMateria(idMateria);
 	}
 	const findAllMaterias = ()=>{
-		MateriaService.getAll().then(result => {
+		MateriaService.getAll(busca).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
@@ -118,10 +119,14 @@ const dashboard = () => {
 	};
 	useEffect(()=>{
 		findAllMaterias();
-	}, [id, statusCreate]);
+	}, [id, statusCreate,busca]);
+
+	useEffect(()=>{
+		findAllCategorias();
+	}, [buscaCategoria]);
 
 	const findAllCategorias = () => {
-		CategoriaService.getAll().then(result => {
+		CategoriaService.getAll(buscaCategoria).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				return;
@@ -468,10 +473,10 @@ const dashboard = () => {
 									justifyContent:"center",
 									alignItems:"center",
 									}}
-									onClick={()=>{setOpen(true); findAllCategorias()}}
+									onClick={()=>{setOpen(true); findAllCategorias(), setMateriaNome("")}}
 									endIcon={<AddCircleOutline />}
 									>
-									Cadastrar Materia
+									Cadastrar Matéria
 								</Button>
 					</Box>
 				
@@ -555,7 +560,7 @@ const dashboard = () => {
 							padding={1}>
 							<ModalTitle>Cadastrar Matéria</ModalTitle>
 							<IconButton
-								onClick={()=>setOpen(false)}
+								onClick={()=>{setOpen(false); }}
 								children={<Close />}
 								sx={{ color: '#FF6969' }}
 							/>
@@ -595,8 +600,8 @@ const dashboard = () => {
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
-										value={busca}
-										onChange={(e)=> setBusca(e.target.value)}
+										value={buscaCategoria}
+										onChange={(e)=> setBuscaCategoria(e.target.value)}
 										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
 										placeholder="Pesquisar..."
 										inputProps={{
@@ -722,7 +727,7 @@ const dashboard = () => {
 							padding={1}>
 							<ModalTitle>Editar Matéria</ModalTitle>
 							<IconButton
-								onClick={()=>{setOpenUpdate(false); setSelectCategoria([]);}}
+								onClick={()=>{setOpenUpdate(false); setSelectCategoria([]); setBuscaCategoria("")}}
 								children={<Close />}
 								sx={{ color: '#FF6969' }}
 							/>
@@ -735,7 +740,7 @@ const dashboard = () => {
 							display="flex"
 							flexDirection="column"
 							gap={2}>
-								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
+								 <TextField  InputLabelProps={{ shrink: true}}value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome" />
 							</Grid>
 						<Grid
 							marginTop={4}
@@ -762,8 +767,8 @@ const dashboard = () => {
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
-										value={busca}
-										onChange={(e)=> setBusca(e.target.value)}
+										value={buscaCategoria}
+										onChange={(e)=> setBuscaCategoria(e.target.value)}
 										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
 										placeholder="Pesquisar..."
 										inputProps={{
@@ -810,40 +815,11 @@ const dashboard = () => {
 							</Box>
 							
 						</Grid>
+					
+				
 						<Grid
 							item
-							xs={6}
-							height="11%"
-							display="flex"
-							flexDirection="column"
-							justifyContent="stretch"
-							alignItems="stretch"
-							paddingLeft={3}
-							paddingRight={3}>
-							<Button
-								sx={{ textTransform: 'capitalize' }}
-								variant="contained"
-								onClick={()=>setOpen(false)}
-								startIcon={<ArrowBack />}
-							>
-								
-								Salvar e voltar
-								
-							</Button>
-						</Grid>
-						<Grid
-							item
-							xs={2}
-							height="11%"
-							display="flex"
-							flexDirection="column"
-							justifyContent="stretch"
-							alignItems="stretch"
-							paddingLeft={3}
-							paddingRight={3}></Grid>
-						<Grid
-							item
-							xs={4}
+							xs={12}
 							height="11%"
 							display="flex"
 							flexDirection="column"
@@ -919,9 +895,9 @@ const dashboard = () => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							padding={1}>
-							<ModalTitle>Cadastrar Materia</ModalTitle>
+							<ModalTitle>Cadastrar Matéria</ModalTitle>
 							<IconButton
-								onClick={()=>setOpen(false)}
+								onClick={()=>{setOpen(false); setSelectCategoria([]); setBuscaCategoria("")}}
 								children={<Close />}
 								sx={{ color: '#FF6969' }}
 							/>
@@ -934,7 +910,7 @@ const dashboard = () => {
 							display="flex"
 							flexDirection="column"
 							gap={2}>
-								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome da matéria" />
+								 <TextField value={materiaNome} onChange={(e)=>setMateriaNome(e.target.value)} fullWidth variant="standard" label="Nome" />
 							</Grid>
 						<Grid
 							marginTop={4}
@@ -961,8 +937,8 @@ const dashboard = () => {
 										<Icon>search</Icon>
 									</IconButton>
 									<InputBase
-										value={busca}
-										onChange={(e)=> setBusca(e.target.value)}
+										value={buscaCategoria}
+										onChange={(e)=> setBuscaCategoria(e.target.value)}
 										sx={{ marginTop: -0.5, ml: 1, flex: 1 }}
 										placeholder="Pesquisar..."
 										inputProps={{
@@ -1194,7 +1170,7 @@ const dashboard = () => {
 							display="flex"
 							flexDirection="column"
 							gap={2}>
-								 <TextField value={categoriaNome} onChange={(e)=>setCategoriaNome(e.target.value)} fullWidth variant="standard" label="Nome da categoria" />
+								 <TextField value={categoriaNome} onChange={(e)=>setCategoriaNome(e.target.value)} fullWidth variant="standard" label="Nome" />
 							</Grid>
 						
 						<Grid

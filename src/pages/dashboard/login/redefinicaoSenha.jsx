@@ -3,16 +3,19 @@ import { Button, capitalize, Grid, IconButton, InputAdornment, Link, Paper, Text
 import LockIcon from '@mui/icons-material/Lock';
 import { Box } from '@mui/system';
 import BaseLoginLayout from '../layout/BaseLoginLayout';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { destroyCookie, parseCookies } from 'nookies';
 import { AdminService } from '../services/api/administrador/AdminService';
+import { AuthAdmContext } from '../../../shared/contexts/AuthAdmContext';
+import { AlertDialog } from '../componnents/AlertDialog';
 
 
 const dashboard = () => {
   const theme = useTheme();
   const router = useRouter();
+  const { message, setMessage} = useContext(AuthAdmContext);
   
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -20,29 +23,79 @@ const dashboard = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+
     const handleClickAlterPassword = () => {
     const {idUsuario} = parseCookies();
-    if (password == confirmPassword) {
-      AdminService.update(
-        {
-          senha: password,
-        },
-        idUsuario
-      ).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        } 
+    if(password){
+      if(password >7){
+        if(confirmPassword){
+          if (password == confirmPassword) {
+            AdminService.update(
+              {
+                senha: password,
+              },
+              idUsuario
+            ).then((result) => {
+              if (result instanceof Error) {
+                setMessage({
+                  open: true,
+                  severity: 'warning',
+                  message: 'Falha ao redefinir senha.',
+                });
+                return;
+              } else{
+                setMessage({
+                  open: true,
+                  severity: 'success',
+                  message: 'Senha alterada com sucesso.',
+                });
+              }
+              
+            });
+            // destroyCookie(null, 'primeiroAcesso');
+            router.push('/dashboard/login');
+          }else{
+            setMessage({
+              open: true,
+              severity: 'warning',
+              message: 'A confirmação de senha deve corresponder a nova senha.',
+            });
+          }
+        }else{
+          setMessage({
+            open: true,
+            severity: 'warning',
+            message: 'Confirme sua senha.',
+          });
+        }
+      }else{
+        setMessage({
+          open: true,
+          severity: 'warning',
+          message: 'A senha deve conter pelo menos 8 caracteres.',
+        });
+      }
+     
+    }else{
+      setMessage({
+        open: true,
+        severity: 'warning',
+        message: 'Preencha sua nova senha.',
       });
-      // destroyCookie(null, 'primeiroAcesso');
-      router.push('/dashboard/login');
     }
+    
     };
   
  
 	
 	return (
 			<BaseLoginLayout>
+        <AlertDialog
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
       <Box
         width={500}
         height={350}

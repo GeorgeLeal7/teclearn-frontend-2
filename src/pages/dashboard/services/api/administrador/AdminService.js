@@ -1,10 +1,9 @@
 import { Api } from '../axios-config';
 
-const getAll = async (
-	
-) => {
+const getAll = async (busca) => {
 	try {
-		const { data } = await Api.get(`/usuario/listarUsuario/`);
+		const { data } = await Api.get(`/usuario/listarUsuario?${
+			busca && 'busca=' + busca + '&'}`);
 		if (data) return data;
 
 		return new Error('Erro ao listar os registros');
@@ -38,7 +37,7 @@ const deleteById = async id => {
 
 const create = async datas => {
 	try {
-		const { data } = await Api.post(`/usuario/inserirUsuarioComum`, datas);
+		const { data } = await Api.post(`/usuario/inserirUsuario`, datas);
 		if (data) return data.id;
 
 		return new Error('Erro ao criar o registro');

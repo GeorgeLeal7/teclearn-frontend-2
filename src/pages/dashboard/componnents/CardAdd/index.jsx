@@ -136,7 +136,7 @@ const CardAdd = ({findCursos}) => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							padding={1}>
-							<ModalTitle>Cadastro de cursos</ModalTitle>
+							<ModalTitle>Cadastrar Curso</ModalTitle>
 							<IconButton
 								onClick={handleClose}
 								children={<Close />}
@@ -245,7 +245,7 @@ const CardAdd = ({findCursos}) => {
 								variant="contained"
 								onClick={()=> createCurso()}
 							>
-								Adicionar
+								Cadastrar
 							</Button>
 						</Grid>
 					</Grid>

@@ -400,40 +400,10 @@ const CardCurso = ({id, nome, foto, getCursos}) => {
 							</Box>
 						</Grid>
 						
+					
 						<Grid
 							item
-							xs={6}
-							height="11%"
-							display="flex"
-							flexDirection="column"
-							justifyContent="stretch"
-							alignItems="stretch"
-							paddingLeft={3}
-							paddingRight={3}>
-							<Button
-								sx={{ textTransform: 'capitalize' }}
-								variant="contained"
-								onClick={()=>setOpen(false)}
-								startIcon={<ArrowBack />}
-							>
-								
-								Salvar e voltar
-								
-							</Button>
-						</Grid>
-						<Grid
-							item
-							xs={2}
-							height="11%"
-							display="flex"
-							flexDirection="column"
-							justifyContent="stretch"
-							alignItems="stretch"
-							paddingLeft={3}
-							paddingRight={3}></Grid>
-						<Grid
-							item
-							xs={4}
+							xs={12}
 							height="11%"
 							display="flex"
 							flexDirection="column"

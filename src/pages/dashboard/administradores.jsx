@@ -59,6 +59,8 @@ const dashboard = () => {
 		setIsUpdate(false)
 	};
 
+	const [busca,setBusca] = useState();
+
 	const createAdmin = () => {
 		if (nome && email) {
 			if (email.indexOf("@") > -1) {
@@ -146,7 +148,7 @@ const dashboard = () => {
 	
 	};
 	const listAdmins=() =>{
-		AdminService.getAll().then(result => {
+		AdminService.getAll(busca).then(result => {
 			if (result instanceof Error) {
 				alert(result.message);
 				console.log(result.message);
@@ -194,7 +196,7 @@ const dashboard = () => {
 	}
 	useEffect(()=>{
 		listAdmins();
-	}, []);
+	}, [busca]);
 
 	useEffect(() => {
 		handleSetDrawerOptions([
@@ -229,7 +231,7 @@ const dashboard = () => {
 						message={message.message}
 					/>
 			<AdmLayout onClick={handleOpen} >
-				<BasicToolbar title="Administradores" />
+				<BasicToolbar title="Administradores" busca={busca} setBusca={setBusca} />
 				<TableContainer
 					width="100%"
 					height="90%"
