@@ -1,5 +1,5 @@
 import { useTheme, useMediaQuery, Box, Grid, Typography, IconButton, Icon, InputBase, Chip, Button, Paper, Modal, TextField } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { MenuDrawer } from '../componnents/menuDrawer/MenuDrawer';
 import { useDrawerContext } from '../../../shared/contexts';
 import BaseLayout from '../layout/BaseLayout';
@@ -11,6 +11,8 @@ import { MateriaService } from '../services/api/materia/MateriaService';
 import { CategoriaService } from '../services/api/categoria/CategoriaService';
 import { parseCookies } from 'nookies';
 import { Text } from '../componnents/Texts/Text';
+import { AuthAdmContext } from '../../../shared/contexts/AuthAdmContext';
+import { AlertDialog } from '../componnents/AlertDialog';
 
 
 const dashboard = () => {
@@ -19,6 +21,8 @@ const dashboard = () => {
 	const router = useRouter();
 	const xlDown = useMediaQuery(theme.breakpoints.down('xl'));
 	const lgDown = useMediaQuery(theme.breakpoints.down('lg'));
+
+	const { message, setMessage} = useContext(AuthAdmContext);
 
 	const [curso, setCurso] = useState();
 	const [materias, setMaterias] = useState();
@@ -52,6 +56,7 @@ const dashboard = () => {
 	};
 
 	const handleClickEdit = (idDaMateria) =>{
+
 		setOpenUpdate(true);
 		findAllCategorias();
 		setSelectCategoria([]);
@@ -113,9 +118,23 @@ const dashboard = () => {
 	}
 
 	const handleClickDelete = () => {
-		MateriaService.deleteById(materiaId).then(()=>{
-			findAllMaterias();
-			setOpeDeleteConfirm(false);
+		MateriaService.deleteById(materiaId).then((result)=>{
+			if(result instanceof Error){
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Falha ao deletar materia.'
+				});
+			}else{
+				setMessage({
+					open: true,
+					severity: 'success',
+					message: 'Materia deletada com sucesso.'
+				});
+				findAllMaterias();
+				setOpeDeleteConfirm(false);
+			}
+			
 		})
 	}
 	const handleClickChip = (id) => {
@@ -140,36 +159,87 @@ const dashboard = () => {
 
 
 	const createMateria =  () => {
-		MateriaService.create({
-			materiaNome
-		}).then((result) => {
-			selectCategoria.map((row)=>{
-				
-				MateriaService.createMateriaCategoria({
-					tblMateriaIdMateria: result,
-					tblCategoriaIdCategoria: row.id
-				})
-			})
-			setStatusCreate(result);
-			setMateriaNome('');
-			setSelectCategoria([]);
-		});
+		if(materiaNome){
+			MateriaService.create({
+				materiaNome
+			}).then((result) => {
+				if(result instanceof Error){
+					setMessage({
+						open: true,
+						severity: 'warning',
+						message: 'Falha ao cadastrar matéria.'
+					});
+				}else{
+					if(selectCategoria){
+						selectCategoria.map((row)=>{
+					
+							MateriaService.createMateriaCategoria({
+								tblMateriaIdMateria: result,
+								tblCategoriaIdCategoria: row.id
+							})
+						})
+						setMessage({
+							open: true,
+							severity: 'success',
+							message: 'Materia cadastrada com sucesso.'
+						});
+					}else{
+						setMessage({
+							open: true,
+							severity: 'success',
+							message: 'Materia cadastrada com sucesso.'
+						});
+					}
+					setStatusCreate(result);
+						setMateriaNome('');
+						setSelectCategoria([]);
+				}
+			
+			});
+		}else{
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha o nome da matéria.'
+			});
+		}
+		
 
 		
 	}
 
 
 	const updateMateria =  () => {
-	
-		MateriaService.update({
-			materiaNome,
-			categorias: selectCategoria
+		if(materiaNome){
+			MateriaService.update({
+				materiaNome,
+				categorias: selectCategoria
+			}
+			, materia).then((result) => {
+				if(result instanceof Error){
+					setMessage({
+						open: true,
+						severity: 'warning',
+						message: 'Falha ao atuaizar matéria.'
+					});
+				}else{
+					setMessage({
+						open: true,
+						severity: 'success',
+						message: 'Matéria atualizada com sucesso.'
+					});
+					setStatusCreate(result);
+				}
+			});
+		}else{
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preenhca o nome da matéria.'
+			});
 		}
-		, materia).then((result) => {
-			setStatusCreate(result);
-			setMateriaNome('');
-			setSelectCategoria([]);
-		});
+	
+	
 
 		
 	}
@@ -217,6 +287,12 @@ const dashboard = () => {
 	return (
 		<MenuDrawer>
 			<BaseLayout sx={{ display: 'flex', padding: 0 }} title="Materia" removeButton>
+			<AlertDialog	
+						open={message.open}
+						severity={message.severity}
+						setOpen={setMessage}
+						message={message.message}
+					/>
 				<Box width="50%" height="100%" display="flex" flexDirection="column" justifyContent="space-between">
 					<Grid container width="100%">
 						
@@ -263,7 +339,7 @@ const dashboard = () => {
 						<Grid
 							item
 							xs={12}
-							height={350}
+							maxHeight={350}
 							display="flex"
 							flexDirection="column"
 							alignItems="flex-start"
@@ -487,8 +563,8 @@ const dashboard = () => {
 								display="flex"
 								gap={1}
 								flexWrap="wrap"
+								// sx={{overflowX:"auto", overFlowY: "none"}}
 							
-								sx={{overflowX:"auto", overFlowY: "none"}}
 								>
 									{
 										categorias && categorias.map((row, i) => (
@@ -512,15 +588,7 @@ const dashboard = () => {
 									}
 									
 							</Box>
-							<Box
-								maxHeight="50%"
-								width="100%"
-								display="flex"
-								gap={1}
-								flexWrap="wrap"
-								overflow="scroll">
-								
-							</Box>
+							
 						</Grid>
 
 						<Grid
@@ -663,7 +731,7 @@ const dashboard = () => {
 								gap={1}
 								flexWrap="wrap"
 							
-								sx={{overflowX:"auto", overFlowY: "none"}}
+								sx={{overflowX:"auto", overFlowY: "none"}}F
 								>
 									{
 										categorias && categorias.map((row, i) => (
@@ -691,15 +759,7 @@ const dashboard = () => {
 									}
 									
 							</Box>
-							<Box
-								maxHeight="50%"
-								width="100%"
-								display="flex"
-								gap={1}
-								flexWrap="wrap"
-								overflow="scroll">
-								
-							</Box>
+							
 						</Grid>
 						<Grid
 							item
@@ -810,7 +870,7 @@ const dashboard = () => {
 							alignItems="flex-start"
 							justifyContent="space-between"
 							padding={1}>
-							<ModalTitle>Cadastrar Categoria</ModalTitle>
+							<ModalTitle>Cadastrar Materia</ModalTitle>
 							<IconButton
 								onClick={()=>setOpen(false)}
 								children={<Close />}
@@ -895,15 +955,7 @@ const dashboard = () => {
 									}
 									
 							</Box>
-							<Box
-								maxHeight="50%"
-								width="100%"
-								display="flex"
-								gap={1}
-								flexWrap="wrap"
-								overflow="scroll">
-								
-							</Box>
+						
 						</Grid>
 
 						<Grid
