@@ -39,19 +39,35 @@ const dashboard = () => {
 	const [selectCategoria, setSelectCategoria] = useState([]);
 
 	const [materiaNome, setMateriaNome] = useState();
+	const [categoriaNome, setCategoriaNome] = useState();
 
 	const [open, setOpen] = useState(false);
 	const [openUpdate, setOpenUpdate] = useState(false);
+	const [openCadastrarCategoria, setOpenCadastrarCategoria] = useState(false);
 
 	const id = useMemo(()=>{
 		return router.query.id
 	}, [router.query]);
 
 	const handleRemoveCategoria = (idCategoria) =>{
-		 CategoriaService.remove(materia, idCategoria).then(()=>{
-			setTimeout(()=>{
-				getCategoriaByMateria(materia);
-			}, 200);
+		 CategoriaService.remove(materia, idCategoria).then((result)=>{
+			 if(result instanceof Error){
+				setMessage({
+					open: true,
+					severity: 'warning',
+					message: 'Falha ao remover categoria'
+				});
+			 }else{
+				setTimeout(()=>{
+					getCategoriaByMateria(materia);
+				}, 200);
+				setMessage({
+					open: true,
+					severity: 'success',
+					message: 'Categoria removida com sucesso.'
+				});
+			 }
+			
 		 })
 	};
 
@@ -59,7 +75,7 @@ const dashboard = () => {
 
 		setOpenUpdate(true);
 		findAllCategorias();
-		setSelectCategoria([]);
+
 		setMateria(idDaMateria);
 		MateriaService.getById(idDaMateria).then((result)=>{
 			setMateriaNome(result.materiaNome);
@@ -74,13 +90,12 @@ const dashboard = () => {
 
 						const id = {id: row.tblCategoriaIdCategoria};
 						array.push(id);
-						console.log(array);
+					
 
 						
 						
 						
 				});
-				
 				setSelectCategoria(array);
 			}
 		});
@@ -170,26 +185,28 @@ const dashboard = () => {
 						message: 'Falha ao cadastrar matéria.'
 					});
 				}else{
-					if(selectCategoria){
 						selectCategoria.map((row)=>{
 					
 							MateriaService.createMateriaCategoria({
 								tblMateriaIdMateria: result,
 								tblCategoriaIdCategoria: row.id
-							})
+							}).then(result=>{
+								if(result instanceof Error){
+									setMessage({
+										open: true,
+										severity: 'warning',
+										message: 'Falha ao cadastrar matéria'
+									});
+									return
+								}
+							});
 						})
 						setMessage({
 							open: true,
 							severity: 'success',
 							message: 'Materia cadastrada com sucesso.'
 						});
-					}else{
-						setMessage({
-							open: true,
-							severity: 'success',
-							message: 'Materia cadastrada com sucesso.'
-						});
-					}
+					
 					setStatusCreate(result);
 						setMateriaNome('');
 						setSelectCategoria([]);
@@ -201,6 +218,41 @@ const dashboard = () => {
 				open: true,
 				severity: 'warning',
 				message: 'Preencha o nome da matéria.'
+			});
+		}
+		
+
+		
+	}
+
+	const createCategoria=  () => {
+		if(categoriaNome){
+			CategoriaService.create({
+				categoriaNome	
+			}).then((result) => {
+				if(result instanceof Error){
+					setMessage({
+						open: true,
+						severity: 'warning',
+						message: 'Falha ao cadastrar categoria.'
+					});
+				}else{
+					setMessage({
+						open: true,
+						severity: 'success',
+						message: 'Categoria cadastrada com sucesso.'
+					});
+					
+					
+						setCategoriaNome('');
+						
+				}			
+			});
+		}else{
+			setMessage({
+				open: true,
+				severity: 'warning',
+				message: 'Preencha o nome da categoria.'
 			});
 		}
 		
@@ -229,6 +281,9 @@ const dashboard = () => {
 						message: 'Matéria atualizada com sucesso.'
 					});
 					setStatusCreate(result);
+					setSelectCategoria([]);
+					getCategoriaByMateria(materia);
+					
 				}
 			});
 		}else{
@@ -672,7 +727,7 @@ const dashboard = () => {
 							padding={1}>
 							<ModalTitle>Editar Matéria</ModalTitle>
 							<IconButton
-								onClick={()=>setOpenUpdate(false)}
+								onClick={()=>{setOpenUpdate(false); setSelectCategoria([]);}}
 								children={<Close />}
 								sx={{ color: '#FF6969' }}
 							/>
@@ -741,7 +796,6 @@ const dashboard = () => {
 												onClick={() => handleClickChip({ id: row.idCategoria})}
 												sx={selectCategoria.map((categoria)=>{
 													if(categoria.id == row.idCategoria){
-														console.log(categoria.id, row.idCategoria);
 														return {backgroundColor: "#3D97F0",
 														color: "#fff",
 														'&.MuiChip-root:hover': {
@@ -1030,10 +1084,10 @@ const dashboard = () => {
 									justifyContent:"center",
 									alignItems:"center",
 									}}
-									
+									onClick={()=> setOpenCadastrarCategoria(true)}
 									endIcon={<AddCircleOutline />}
 									>
-									Adicionar Categoria
+									Cadastrar Categoria
 								</Button>
 					</Box>
 				</Box>
@@ -1100,6 +1154,77 @@ const dashboard = () => {
 						</Grid>
 					</Box>
 				</Modal>
+
+
+
+				<Modal
+				open={openCadastrarCategoria}
+				display="flex"
+				alignItems="center"
+				justifyContent="center"
+				backgroundColor="primary.modal"
+				component={Box}>
+				<Box
+					width={theme.spacing(80)}
+					height={theme.spacing(30)}
+					backgroundColor="primary.contrastText"
+					marginTop={-5}
+					borderRadius={1}
+					elevation={2}
+					padding={2}
+					component={Paper}>
+					<Grid container width="100%" height="100%">
+						<Grid
+							item
+							xs={12}
+							height="4%"
+							display="flex"
+							alignItems="flex-start"
+							justifyContent="space-between"
+							padding={1}>
+							<ModalTitle>Cadastrar categoria</ModalTitle>
+							<IconButton
+								onClick={()=>setOpenCadastrarCategoria(false)}
+								children={<Close />}
+								sx={{ color: '#FF6969' }}
+							/>
+						</Grid>
+						<Grid
+							item
+							xs={12}
+							height="10%"
+						
+							paddingLeft={3}
+							paddingRight={3}
+							display="flex"
+							flexDirection="column"
+							gap={2}>
+								 <TextField value={categoriaNome} onChange={(e)=>setCategoriaNome(e.target.value)} fullWidth variant="standard" label="Nome da categoria" />
+							</Grid>
+						
+						<Grid
+							item
+							xs={12}
+							height="11%"
+							display="flex"
+							flexDirection="column"
+							justifyContent="stretch"
+							alignItems="stretch"
+							paddingLeft={3}
+							paddingRight={3}>
+							<Button
+								sx={{ textTransform: 'capitalize' }}
+								variant="contained"
+								onClick={()=>createCategoria()}
+							>
+								Cadastrar
+							</Button>
+
+							
+						</Grid>
+					</Grid>
+				</Box>
+			</Modal>
 			</BaseLayout>
 		</MenuDrawer>
 	);

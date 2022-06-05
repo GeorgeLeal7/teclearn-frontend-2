@@ -32,6 +32,7 @@ import { AdminService } from './services/api/administrador/AdminService';
 import { parseCookies } from 'nookies';
 import { AuthAdmContext } from '../../shared/contexts/AuthAdmContext';
 import { AlertDialog } from './componnents/AlertDialog';
+import AdmLayout from './layout/AdmLayout';
 
 const dashboard = () => {
 	const { handleSetDrawerOptions } = useDrawerContext();
@@ -52,7 +53,7 @@ const dashboard = () => {
 
 	const [open, setOpen] = useState(false);
 	const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
-	const handleOpen = () => setOpen(true);
+	const handleOpen = () => {setOpen(true); setNome(""); setEmail("")};
 	const handleClose = () => {
 		setOpen(false);
 		setIsUpdate(false)
@@ -232,7 +233,7 @@ const dashboard = () => {
 						setOpen={setMessage}
 						message={message.message}
 					/>
-			<BaseLayout onClick={handleOpen} title="Administrador">
+			<AdmLayout onClick={handleOpen} >
 				<BasicToolbar title="Administradores" />
 				<TableContainer
 					width="100%"
@@ -431,12 +432,12 @@ const dashboard = () => {
 								justifyContent="flex-start"
 								alignItems="flex-end"
 								padding={3}>
-								<Button variant="contained" sx={{ textTransform: "capitalize" }}   onClick={() => { isUpdate ? updateAdmin(idAdmin) : createAdmin() }}>{isUpdate? "Atualizar" : ""}</Button>
+								<Button variant="contained" sx={{ textTransform: "capitalize" }}   onClick={() => { isUpdate ? updateAdmin(idAdmin) : createAdmin() }}>{isUpdate? "Atualizar" : "Cadastrar"}</Button>
 							</Grid>
 						</Grid>
 					</Box>
 				</Modal>
-			</BaseLayout>
+			</AdmLayout>
 		</MenuDrawer>
 	);
 };
